@@ -37,7 +37,7 @@ namespace GameDeal_App
                 foreach (string line in configFile )
                 {
                     //If it contains sender then we look for email
-                    if (line.Contains("sender")) {
+                    if (line.Contains("sender\"")) {
                         emailInput.Text = GetValue(line);
                     }
                     //If it contains senderPass we search of password

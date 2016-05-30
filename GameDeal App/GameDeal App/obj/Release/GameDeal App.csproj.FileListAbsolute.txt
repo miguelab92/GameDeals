@@ -1,0 +1,11 @@
+C:\Users\Soulin\Documents\Programs\cSharp\GameDeal App\GameDeal App\bin\Release\GameDeal App.exe.config
+C:\Users\Soulin\Documents\Programs\cSharp\GameDeal App\GameDeal App\bin\Release\GameDeal App.exe
+C:\Users\Soulin\Documents\Programs\cSharp\GameDeal App\GameDeal App\bin\Release\GameDeal App.pdb
+C:\Users\Soulin\Documents\Programs\cSharp\GameDeal App\GameDeal App\bin\Release\Logger.dll
+C:\Users\Soulin\Documents\Programs\cSharp\GameDeal App\GameDeal App\obj\Release\GameDeal_App.ExtraSettings.resources
+C:\Users\Soulin\Documents\Programs\cSharp\GameDeal App\GameDeal App\obj\Release\GameDeal_App.GameDealApp.resources
+C:\Users\Soulin\Documents\Programs\cSharp\GameDeal App\GameDeal App\obj\Release\GameDeal_App.Properties.Resources.resources
+C:\Users\Soulin\Documents\Programs\cSharp\GameDeal App\GameDeal App\obj\Release\GameDeal App.csproj.GenerateResource.Cache
+C:\Users\Soulin\Documents\Programs\cSharp\GameDeal App\GameDeal App\obj\Release\GameDeal App.exe
+C:\Users\Soulin\Documents\Programs\cSharp\GameDeal App\GameDeal App\obj\Release\GameDeal App.pdb
+C:\Users\Soulin\Documents\Programs\cSharp\GameDeal App\GameDeal App\obj\Release\GameDeal App.csprojResolveAssemblyReference.cache
