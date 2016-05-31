@@ -13,8 +13,12 @@ namespace GameDeal_App
 {
     public partial class GameDealApp : Form
     {
+        //Name of .bat file
         private static string BAT_FILE = "GameDealsChecker.bat";
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public GameDealApp()
         {
             InitializeComponent();
@@ -28,14 +32,18 @@ namespace GameDeal_App
         private void GameDealApp_Load(object sender, EventArgs e)
         {
             //If there is a previous BAT file
-            if ( File.Exists(BAT_FILE))
+            if (File.Exists(BAT_FILE))
             {
                 //Get the current argument list
                 getArgs();
             } else
             {
                 //Create a new BAT
-                SaveList();
+                if (SaveList())
+                {
+                    MessageBox.Show("Welcome first time user! Please make sure you follow " +
+                        "the README file for instructions on how to set up the program correctly.");
+                }
             }
         }
 
@@ -172,7 +180,10 @@ namespace GameDeal_App
         /// <param name="e">Not Used</param>
         private void addButton_Click(object sender, EventArgs e)
         {
+            //Add text to list and clear text box
             AddToList();
+            inputBox.Text = "";
+            inputBox.Focus();
         }
 
         /// <summary>
@@ -191,24 +202,32 @@ namespace GameDeal_App
                 curLocation = gamesList.SelectedIndex;
                 //Delete game at that index
                 gamesList.Items.RemoveAt(gamesList.SelectedIndex);
-                
+
                 //If there still remains at least one game
-                if (gamesList.Items.Count > 0 )
+                if (gamesList.Items.Count > 0)
                 {
                     //If the selected index was not at 0
-                    if ( curLocation != 0 )
+                    if (curLocation != 0)
                     {
                         //Our new selected index is the old index minus one
                         gamesList.SelectedIndex = curLocation - 1;
-                    } else
+                    }
+                    else
                     {
                         //Our index is now 0
                         gamesList.SelectedIndex = curLocation;
                     }
                 }
-            } else
+            }
+            else
             {
-                MessageBox.Show("Select a button from the list first");
+                if (gamesList.Items.Count > 0)
+                {
+                    MessageBox.Show("Select a game from the list to delete");
+                } else
+                {
+                    MessageBox.Show("No games in list");
+                }
             }
         }
 

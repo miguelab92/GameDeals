@@ -14,8 +14,10 @@ namespace GameDeal_App
 {
     public partial class ExtraSettings : Form
     {
+        //Name of .bat file
         private readonly string APP_FILE = "GameDealsChecker.exe.config";
 
+        //Constructor
         public ExtraSettings()
         {
             InitializeComponent();
@@ -110,7 +112,7 @@ namespace GameDeal_App
         /// <param name="e">Not used</param>
         private void saveButton_Click(object sender, EventArgs e)
         {
-            if (emailInput.Text != "" && passInput.Text != "")
+            if (validateFields())
             {
                 StreamWriter appFile;
                 StringBuilder tempString = new StringBuilder();
@@ -122,7 +124,7 @@ namespace GameDeal_App
                 tempString.Append("   <startup>\n");
                 tempString.Append("     <supportedRuntime version=\"v4.0\" sku=\".NETFramework,Version=v4.5.2\"\n/>");
                 tempString.Append("   </startup>\n");
-                tempString.Append("  <appSettings>\n" );
+                tempString.Append("  <appSettings>\n");
                 tempString.Append("  <!-- Settings -->\n");
                 tempString.Append("    <add key=\"mailserver\" value=\"smtp.gmail.com\"/>\n");
                 tempString.Append("    <add key=\"portNum\" value=\"587\"/>\n");
@@ -136,12 +138,14 @@ namespace GameDeal_App
                 tempString.Append(emailInput.Text);
                 tempString.Append("\"/>\n");
                 tempString.Append("    <add key=\"CC\" value=\"");
+                //If we should include the copy list
                 if (copyButton.Checked)
                 {
                     tempString.Append(copyInputText.Text);
                 }
                 tempString.Append("\"/>\n");
                 tempString.Append("    <add key=\"thoroughSearch\" value=\"");
+                //If thorough search was checked
                 if (thoroughButton.Checked)
                 {
                     tempString.Append("true");
@@ -155,44 +159,125 @@ namespace GameDeal_App
                 tempString.Append("    <add key=\"webPage\" value=\"https://www.reddit.com/r/gamedeals\"/>\n");
                 tempString.Append("  </appSettings>\n");
                 tempString.Append("</configuration>");
-                
+
                 try
                 {
-                    if (File.Exists(APP_FILE)) {
+                    //If there is currently a .bat file
+                    if (File.Exists(APP_FILE))
+                    {
+                        //Delete it
                         File.Delete(APP_FILE);
                     }
+                    //Create a new .bat file
                     appFile = File.AppendText(APP_FILE);
+                    //Write out to file
                     appFile.Write(tempString.ToString());
                     //Close file
                     appFile.Close();
-                } catch (Exception ex)
+                }
+                catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message);
                 }
 
                 //Close form
                 this.Close();
-            } else
-            {
-                MessageBox.Show("Email and/or Password input is empty");
             }
-            
         }
 
         /// <summary>
-        /// Copy cutton was changed
+        /// Validate all the fields
+        /// </summary>
+        /// <returns>Results</returns>
+        private bool validateFields()
+        {
+            //Holds results assumes false
+            bool validFields = false;
+            
+            //If no available fields are empty or errored out
+            if (emailInput.BackColor != Color.Red && emailInput.Text != "" && 
+                passInput.Text != "" && (!copyButton.Checked ||
+               (copyButton.Checked && copyInputText.Text != "" && 
+               copyInputText.BackColor != Color.Red)))
+            {
+                //We have valid fields
+                validFields = true;
+            }
+            else
+            {
+                //If email is empty warn the user with color
+                if (emailInput.Text == "")
+                {
+                    emailInput.BackColor = Color.Red;
+                    emailError.Visible = true;
+                }
+                //If password is empty warn user with color
+                if (passInput.Text == "")
+                {
+                    passInput.BackColor = Color.Red;
+                    passError.Visible = true;
+                }
+                //If cc is empty and button was checked warn user
+                if (copyButton.Checked && copyButton.Text == "")
+                {
+                    copyButton.BackColor = Color.Red;
+                    ccError.Visible = true;
+                }
+            }
+
+            //Return results
+            return validFields;
+        }
+        
+        /// <summary>
+        /// Validates email passed
+        /// </summary>
+        /// <param name="email">Email to check</param>
+        /// <returns>Result</returns>
+        private bool ValidEmail(string email)
+        {
+            //Holds result
+            bool isEmail;
+            
+            //Try to create a MailAddress with email
+            try
+            {
+                MailAddress emailAddress = new MailAddress(email);
+                //If we match then success
+                isEmail = emailAddress.Address == email;
+            } catch
+            {
+                //Else catch the failure
+                isEmail = false;
+            }
+
+            //Return results
+            return isEmail;
+        }
+
+        /// <summary>
+        /// Copy button was changed
         /// </summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
         private void copyButton_CheckedChanged(object sender, EventArgs e)
         {
-            //If it was checked we enable text writting otherwise disable it
             if (copyButton.Checked)
             {
+                //Enable text box
                 copyInputText.Enabled = true;
             } else
             {
+                //Disable textbox
                 copyInputText.Enabled = false;
+                //If it was errored we also clear text
+                if (copyInputText.BackColor == Color.Red)
+                {
+                    copyInputText.Text = "";
+                    //Reset color and error
+                    ccError.Visible = false;
+                    copyInputText.BackColor = Color.White;
+                }
             }
         }
 
@@ -221,27 +306,122 @@ namespace GameDeal_App
         /// <param name="e">Not used</param>
         private void testButton_Click(object sender, EventArgs e)
         {
-            //Temp test log
-            LogFile testLog = new LogFile("GameDeal App Test");
-
-            //Set up MailMessage based on input
-            MailMessage testMsg = new MailMessage(emailInput.Text, emailInput.Text);
-            testMsg.Subject = "GameDeal App Test";
-            testMsg.IsBodyHtml = true;
-
-            //Set up SmtpClient based on input
-            SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
-            client.Credentials = new NetworkCredential(emailInput.Text, passInput.Text);
-            client.EnableSsl = true;
-
-            //Try to mail
-            try {
-                testLog.MailLog(client, testMsg);
-                MessageBox.Show("Test email send. Please check your inbox (allow a few minutes)");
-            }
-            catch (Exception ex)
+            if (validateFields())
             {
-                MessageBox.Show(ex.Message + "\nError testing email. Check your input.");
+                //Temp test log
+                LogFile testLog = new LogFile("GameDeal App Test");
+
+                //Set up MailMessage based on input
+                MailMessage testMsg = new MailMessage(emailInput.Text, emailInput.Text);
+                testMsg.Subject = "GameDeal App Test";
+                testMsg.IsBodyHtml = true;
+
+                //Set up SmtpClient based on input
+                SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
+                client.Credentials = new NetworkCredential(emailInput.Text, passInput.Text);
+                client.EnableSsl = true;
+
+                //Try to mail
+                try
+                {
+                    testLog.MailLog(client, testMsg);
+                    MessageBox.Show("Test email send. Please check your inbox (allow up to a few minutes)");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message + "\nError testing email. Check your input and try again.");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Reset error when user enters this field
+        /// </summary>
+        /// <param name="sender">Not used</param>
+        /// <param name="e">Not used</param>
+        private void emailInput_Enter(object sender, EventArgs e)
+        {
+            //Reset color and hide error
+            emailInput.BackColor = Color.White;
+            emailError.Visible = false;
+        }
+
+        /// <summary>
+        /// Check if email is valid when user attempts to exit this field
+        /// </summary>
+        /// <param name="sender">Not used</param>
+        /// <param name="e">Not used</param>
+        private void emailInput_Leave(object sender, EventArgs e)
+        {
+            //Check email and if not valid warn user
+            if (!ValidEmail(emailInput.Text))
+            {
+                emailInput.BackColor = Color.Red;
+                emailError.Visible = true;
+            }
+        }
+
+        /// <summary>
+        /// Reset error when user enters this field
+        /// </summary>
+        /// <param name="sender">Not used</param>
+        /// <param name="e">Not used</param>
+        private void passInput_Enter(object sender, EventArgs e)
+        {
+            //Reset color and hide error
+            passInput.BackColor = Color.White;
+            passError.Visible = false;
+        }
+
+        /// <summary>
+        /// Reset error when user enters this field
+        /// </summary>
+        /// <param name="sender">Not used</param>
+        /// <param name="e">Not used</param>
+        private void copyInputText_Enter(object sender, EventArgs e)
+        {
+            //Reset color and hide error
+            copyInputText.BackColor = Color.White;
+            ccError.Visible = false;
+        }
+
+        /// <summary>
+        /// Check if emails are valid when user attempts to exit this field
+        /// </summary>
+        /// <param name="sender">Not used</param>
+        /// <param name="e">Not used</param>
+        private void copyInputText_Leave(object sender, EventArgs e)
+        {
+            //Holds results
+            bool allEmailsValid = true;
+
+            //If the field is empty then it must be invalid
+            if ( copyInputText.Text == "")
+            {
+                allEmailsValid = false; 
+                
+            } else
+            {
+                //Split emails by the space
+                string[] emailsList = copyInputText.Text.Split(' ');
+                //For each email we read
+                foreach (string email in emailsList)
+                {
+                    //If emails are still valid
+                    if (allEmailsValid)
+                    {
+                        //Check current email
+                        allEmailsValid = ValidEmail(email);
+                    }
+                }
+            }
+
+            //If at any point we found invalid emails
+            if (!allEmailsValid)
+            {
+                //Change color to red and warn user
+                copyInputText.BackColor = Color.Red;
+                ccError.Visible = true;
             }
         }
     }
