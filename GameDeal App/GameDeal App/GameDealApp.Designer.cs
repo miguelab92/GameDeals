@@ -35,6 +35,7 @@
             this.inputBox = new System.Windows.Forms.TextBox();
             this.settingsButton = new System.Windows.Forms.Button();
             this.saveListButton = new System.Windows.Forms.Button();
+            this.scheduleButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // listBoxLabel
@@ -54,7 +55,7 @@
             this.gamesList.FormattingEnabled = true;
             this.gamesList.Location = new System.Drawing.Point(12, 25);
             this.gamesList.Name = "gamesList";
-            this.gamesList.Size = new System.Drawing.Size(224, 147);
+            this.gamesList.Size = new System.Drawing.Size(297, 147);
             this.gamesList.TabIndex = 1;
             // 
             // addButton
@@ -71,11 +72,11 @@
             // remove
             // 
             this.remove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.remove.Location = new System.Drawing.Point(202, 177);
+            this.remove.Location = new System.Drawing.Point(262, 177);
             this.remove.Name = "remove";
-            this.remove.Size = new System.Drawing.Size(34, 20);
+            this.remove.Size = new System.Drawing.Size(47, 20);
             this.remove.TabIndex = 3;
-            this.remove.Text = "Del";
+            this.remove.Text = "Delete";
             this.remove.UseVisualStyleBackColor = true;
             this.remove.Click += new System.EventHandler(this.remove_Click);
             // 
@@ -91,18 +92,18 @@
             // settingsButton
             // 
             this.settingsButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.settingsButton.Location = new System.Drawing.Point(148, 209);
+            this.settingsButton.Location = new System.Drawing.Point(126, 209);
             this.settingsButton.Name = "settingsButton";
             this.settingsButton.Size = new System.Drawing.Size(75, 23);
             this.settingsButton.TabIndex = 5;
-            this.settingsButton.Text = "App Settings";
+            this.settingsButton.Text = "Email Set-up";
             this.settingsButton.UseVisualStyleBackColor = true;
             this.settingsButton.Click += new System.EventHandler(this.settingsButton_Click);
             // 
             // saveListButton
             // 
             this.saveListButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.saveListButton.Location = new System.Drawing.Point(41, 209);
+            this.saveListButton.Location = new System.Drawing.Point(12, 209);
             this.saveListButton.Name = "saveListButton";
             this.saveListButton.Size = new System.Drawing.Size(75, 23);
             this.saveListButton.TabIndex = 6;
@@ -110,11 +111,23 @@
             this.saveListButton.UseVisualStyleBackColor = true;
             this.saveListButton.Click += new System.EventHandler(this.saveListButton_Click);
             // 
+            // scheduleButton
+            // 
+            this.scheduleButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.scheduleButton.Location = new System.Drawing.Point(234, 209);
+            this.scheduleButton.Name = "scheduleButton";
+            this.scheduleButton.Size = new System.Drawing.Size(75, 23);
+            this.scheduleButton.TabIndex = 7;
+            this.scheduleButton.Text = "Schedule";
+            this.scheduleButton.UseVisualStyleBackColor = true;
+            this.scheduleButton.Click += new System.EventHandler(this.scheduleButton_Click);
+            // 
             // GameDealApp
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(248, 240);
+            this.ClientSize = new System.Drawing.Size(325, 247);
+            this.Controls.Add(this.scheduleButton);
             this.Controls.Add(this.saveListButton);
             this.Controls.Add(this.settingsButton);
             this.Controls.Add(this.inputBox);
@@ -140,6 +153,7 @@
         private System.Windows.Forms.TextBox inputBox;
         private System.Windows.Forms.Button settingsButton;
         private System.Windows.Forms.Button saveListButton;
+        private System.Windows.Forms.Button scheduleButton;
     }
 }
 

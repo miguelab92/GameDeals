@@ -324,7 +324,10 @@ namespace GameDeal_App
                 //Try to mail
                 try
                 {
+                    //Try to mail
                     testLog.MailLog(client, testMsg);
+                    //Dispose of opened resources
+                    testMsg.Dispose();
                     MessageBox.Show("Test email send. Please check your inbox (allow up to a few minutes)");
                 }
                 catch (Exception ex)

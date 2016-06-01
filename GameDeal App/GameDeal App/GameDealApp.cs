@@ -269,5 +269,16 @@ namespace GameDeal_App
                 inputBox.Text = "";
             }
         }
+
+        /// <summary>
+        /// Calls scheduler
+        /// </summary>
+        /// <param name="sender">Not Used</param>
+        /// <param name="e">Not Used</param>
+        private void scheduleButton_Click(object sender, EventArgs e)
+        {
+            Scheduler settingsCall = new Scheduler();
+            settingsCall.ShowDialog();
+        }
     }
 }
