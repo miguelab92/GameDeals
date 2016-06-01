@@ -19,8 +19,6 @@ namespace GameDeal_App
     {
         //Holds task we are working on
         ITaskDefinition newTask;
-        //Holds if schedule exists or not
-        bool taskExists;
 
         //Task name
         private readonly static string TASK_NAME = "GameDealsChecker";
@@ -40,9 +38,6 @@ namespace GameDeal_App
         /// <param name="e">Not Used</param>
         private void Scheduler_Load(object sender, EventArgs e)
         {
-            //Holds whether task already exists
-            taskExists = false;
-
             //Create a new interface for the task scheduler
             ITaskService taskService = new TaskScheduler.TaskScheduler();
             taskService.Connect();
@@ -60,7 +55,7 @@ namespace GameDeal_App
                 {
                     //Use existing task as base
                     newTask = task.Definition;
-                    taskExists = true;
+                    taskExistsLabel.BackColor = Color.Green;
 
                     //Check the trigger(s) for the type and start time/delay
                     foreach (ITrigger trigger in task.Definition.Triggers)
@@ -93,7 +88,7 @@ namespace GameDeal_App
             }
 
             //If task doesn't exist
-            if (!taskExists)
+            if (taskExistsLabel.BackColor == Color. Red)
             {
                 //Create new task
                 newTask = taskService.NewTask(0);
@@ -160,7 +155,11 @@ namespace GameDeal_App
                     null, null, _TASK_LOGON_TYPE.TASK_LOGON_NONE);
 
                 //Task now exists
-                taskExists = true;
+                taskExistsLabel.BackColor = Color.Green;
+
+                //User feedback
+                MessageBox.Show("Task successfully created!");
+
             } catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
@@ -207,6 +206,9 @@ namespace GameDeal_App
                             //Show error (likely parse)
                             MessageBox.Show(ex.Message);
                         }
+                    } else
+                    {
+                        MessageBox.Show("Invalid time");
                     }
                 }
             } else 
@@ -224,32 +226,17 @@ namespace GameDeal_App
             //Holds results
             bool isValid = false;
 
-            //See if we can remove try
-            try
+            if (timeInputBox.Text != "")
             {
                 //Check that if we split it by : there are two parts
                 string[] parts = timeInputBox.Text.Split(':');
-                if (parts.Length == 2)
-                {
-                    //Assume true for now
-                    isValid = true;
-                    //For each part check that the length is greater than 0 and less than 3
-                    for (int i = 0; i < parts.Length; ++i)
-                    {
-                        if ( parts[i].Length < 1 || parts[i].Length > 2 )
-                        {
-                            isValid = false;
-                        }
-                    }
 
-                    if (int.Parse(parts[0]) < 0 || int.Parse(parts[0]) > 12 || 
-                          int.Parse(parts[1]) < 0 || int.Parse(parts[1]) > 59 )
-                    {
-                        isValid = false;
-                    }
+                if (int.Parse(parts[0]) >= 0 && int.Parse(parts[0]) < 12 &&
+                      int.Parse(parts[1]) >= 0 && int.Parse(parts[1]) < 60)
+                {
+                    isValid = true;
                 }
             }
-            catch { }
 
             //Return results
             return isValid;
@@ -263,7 +250,7 @@ namespace GameDeal_App
         private void deleteScheduleButton_Click(object sender, EventArgs e)
         {
             //First be sure task exists
-            if (taskExists)
+            if (taskExistsLabel.BackColor == Color.Green)
             {
                 //Create a new interface for the task scheduler
                 ITaskService taskService = new TaskScheduler.TaskScheduler();
@@ -276,7 +263,7 @@ namespace GameDeal_App
                     //Delete task
                     taskFolder.DeleteTask(TASK_NAME, 0);
                     MessageBox.Show("Task successfully deleted!");
-                    taskExists = false;
+                    taskExistsLabel.BackColor = Color.Red;
                 }
                 catch (Exception ex)
                 {
@@ -298,6 +285,7 @@ namespace GameDeal_App
         {
             if (!char.IsDigit(e.KeyChar) || !char.IsControl(e.KeyChar))
             {
+                //Ignore any keys that aren't digits or control keys
                 e.Handled = true;
             }
         }
@@ -309,13 +297,23 @@ namespace GameDeal_App
         /// <param name="e">Not Used</param>
         private void timedButton_CheckedChanged(object sender, EventArgs e)
         {
+            //If turned on we allow extra options if turned off we disable
             if (timedButton.Checked)
             {
                 timeInputBox.Enabled = true;
+                timeButtonAM.Enabled = true;
+                timeButtonPM.Enabled = true;
             } else
             {
-                timeInputBox.Enabled = false; 
+                timeInputBox.Enabled = false;
+                timeButtonAM.Enabled = false;
+                timeButtonPM.Enabled = false;
             }
+        }
+
+        private void taskExistsLabel_MouseHover(object sender, EventArgs e)
+        {
+
         }
     }
 }

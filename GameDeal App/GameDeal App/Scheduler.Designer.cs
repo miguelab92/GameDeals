@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.scheduleButton = new System.Windows.Forms.Button();
             this.startupButton = new System.Windows.Forms.RadioButton();
             this.timedButton = new System.Windows.Forms.RadioButton();
@@ -39,6 +40,8 @@
             this.deleteScheduleButton = new System.Windows.Forms.Button();
             this.timeInputBox = new System.Windows.Forms.MaskedTextBox();
             this.timeGroup = new System.Windows.Forms.GroupBox();
+            this.taskExistsLabel = new System.Windows.Forms.Label();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.timeGroup.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -103,6 +106,7 @@
             // timeButtonAM
             // 
             this.timeButtonAM.AutoSize = true;
+            this.timeButtonAM.Enabled = false;
             this.timeButtonAM.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.timeButtonAM.Location = new System.Drawing.Point(6, 11);
             this.timeButtonAM.Name = "timeButtonAM";
@@ -115,6 +119,7 @@
             // timeButtonPM
             // 
             this.timeButtonPM.AutoSize = true;
+            this.timeButtonPM.Enabled = false;
             this.timeButtonPM.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.timeButtonPM.Location = new System.Drawing.Point(6, 29);
             this.timeButtonPM.Name = "timeButtonPM";
@@ -160,17 +165,32 @@
             // 
             this.timeGroup.Controls.Add(this.timeButtonAM);
             this.timeGroup.Controls.Add(this.timeButtonPM);
-            this.timeGroup.Location = new System.Drawing.Point(237, 47);
+            this.timeGroup.Location = new System.Drawing.Point(237, 49);
             this.timeGroup.Name = "timeGroup";
             this.timeGroup.Size = new System.Drawing.Size(47, 51);
             this.timeGroup.TabIndex = 13;
             this.timeGroup.TabStop = false;
+            // 
+            // taskExistsLabel
+            // 
+            this.taskExistsLabel.BackColor = System.Drawing.Color.Red;
+            this.taskExistsLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.taskExistsLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.taskExistsLabel.ForeColor = System.Drawing.Color.Red;
+            this.taskExistsLabel.Location = new System.Drawing.Point(268, 9);
+            this.taskExistsLabel.Name = "taskExistsLabel";
+            this.taskExistsLabel.Size = new System.Drawing.Size(16, 16);
+            this.taskExistsLabel.TabIndex = 15;
+            this.toolTip.SetToolTip(this.taskExistsLabel, "Color shows if schedule currently exists. (Red = No schedule, Green = Schedule Ex" +
+        "ists).");
+            this.taskExistsLabel.MouseHover += new System.EventHandler(this.taskExistsLabel_MouseHover);
             // 
             // Scheduler
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(296, 156);
+            this.Controls.Add(this.taskExistsLabel);
             this.Controls.Add(this.timeGroup);
             this.Controls.Add(this.timeInputBox);
             this.Controls.Add(this.deleteScheduleButton);
@@ -204,5 +224,7 @@
         private System.Windows.Forms.Button deleteScheduleButton;
         private System.Windows.Forms.MaskedTextBox timeInputBox;
         private System.Windows.Forms.GroupBox timeGroup;
+        private System.Windows.Forms.Label taskExistsLabel;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }

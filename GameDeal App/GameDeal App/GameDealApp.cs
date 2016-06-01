@@ -124,7 +124,9 @@ namespace GameDeal_App
             {
                 //else we have no reason to call exe and instead
                 //just display a message that list is empty
-                tempString.Append("No games listed in GameDeal App");
+                tempString.Append("REM No games listed in GameDeal App\n");
+                tempString.Append("@ECHO off\n");
+                tempString.Append("PAUSE");
             }
 
             try
@@ -180,13 +182,9 @@ namespace GameDeal_App
         /// <param name="e">Not Used</param>
         private void addButton_Click(object sender, EventArgs e)
         {
-            //Add text to list and clear text box
+            //Add text to list, save and clear text box
             AddToList();
-
-            /***** Save testing list ******/
             SaveList();
-
-
             inputBox.Text = "";
             inputBox.Focus();
         }
@@ -223,34 +221,17 @@ namespace GameDeal_App
                         gamesList.SelectedIndex = curLocation;
                     }
                 }
+
+                //Save updated list
+                SaveList();
             }
             else
             {
                 if (gamesList.Items.Count > 0)
                 {
                     MessageBox.Show("Select a game from the list to delete");
-                } else
-                {
-                    MessageBox.Show("No games in list");
                 }
             }
-        }
-        /// <summary>
-        /// Save list
-        /// </summary>
-        /// <param name="sender">Not Used</param>
-        /// <param name="e">Not Used</param>
-        private void saveListButton_Click(object sender, EventArgs e)
-        {
-
-            /*
-             * 
-             * Temp testing **************
-             * 
-                if (SaveList()) {
-                    MessageBox.Show("List successfully saved!");
-                }
-            */
         }
 
         /// <summary>
