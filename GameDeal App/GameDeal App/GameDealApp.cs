@@ -182,6 +182,11 @@ namespace GameDeal_App
         {
             //Add text to list and clear text box
             AddToList();
+
+            /***** Save testing list ******/
+            SaveList();
+
+
             inputBox.Text = "";
             inputBox.Focus();
         }
@@ -230,7 +235,6 @@ namespace GameDeal_App
                 }
             }
         }
-
         /// <summary>
         /// Save list
         /// </summary>
@@ -238,9 +242,15 @@ namespace GameDeal_App
         /// <param name="e">Not Used</param>
         private void saveListButton_Click(object sender, EventArgs e)
         {
-            if (SaveList()) {
-                MessageBox.Show("List successfully saved!");
-            }
+
+            /*
+             * 
+             * Temp testing **************
+             * 
+                if (SaveList()) {
+                    MessageBox.Show("List successfully saved!");
+                }
+            */
         }
 
         /// <summary>
@@ -264,9 +274,8 @@ namespace GameDeal_App
             //If it was enter or return
             if ( e.KeyCode == Keys.Enter || e.KeyCode == Keys.Return )
             {
-                //Add text to list and clear text box
-                AddToList();
-                inputBox.Text = "";
+                //Act as if add button was clicked
+                addButton.PerformClick();
             }
         }
 

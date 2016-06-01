@@ -66,7 +66,7 @@ namespace GameDeal_App
                     foreach (ITrigger trigger in task.Definition.Triggers)
                     {
                         //If it was type Schedule on the hour
-                        if (trigger.Type == (_TASK_TRIGGER_TYPE2)2)
+                        if (trigger.Type == (_TASK_TRIGGER_TYPE2) 2 )
                         {
                             //Check the time button as true
                             timedButton.Checked = true;
@@ -80,12 +80,12 @@ namespace GameDeal_App
                                 MessageBox.Show(ex.Message);
                             }
                         }
-                        //Else the type was on boot
-                        else if (trigger.Type == (_TASK_TRIGGER_TYPE2)9)
+                        //Else if the type was on boot
+                        else if (trigger.Type == (_TASK_TRIGGER_TYPE2) 9 )
                         {
                             startupButton.Checked = true;
                         }
-                        //User has manually changed settings
+                        //User has manually changed settings and its neither option
                         else
                         {}
                     }

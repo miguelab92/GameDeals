@@ -14,7 +14,7 @@ namespace GameDeal_App
 {
     public partial class ExtraSettings : Form
     {
-        //Name of .bat file
+        //Name of config file
         private readonly string APP_FILE = "GameDealsChecker.exe.config";
 
         //Constructor
@@ -25,7 +25,7 @@ namespace GameDeal_App
         }
 
         /// <summary>
-        /// Get previous data from config file
+        /// Get current data from config file
         /// </summary>
         private void GetData()
         {
@@ -67,7 +67,8 @@ namespace GameDeal_App
                                 thoroughButton.Checked = true;
                             }
                         }
-                        //Likely an error with formatting. Can be ignored
+                        //User might have messed with formatting. Can be
+                        //ignored as we still highly recommend false
                         catch
                         {
                         }
@@ -256,7 +257,7 @@ namespace GameDeal_App
         }
 
         /// <summary>
-        /// Copy button was changed
+        /// Copy button was checked or unchecked
         /// </summary>
         /// <param name="sender">Not used</param>
         /// <param name="e">Not used</param>
@@ -406,7 +407,7 @@ namespace GameDeal_App
             } else
             {
                 //Split emails by the space
-                string[] emailsList = copyInputText.Text.Split(' ');
+                string[] emailsList = copyInputText.Text.Split(',');
                 //For each email we read
                 foreach (string email in emailsList)
                 {
@@ -425,6 +426,32 @@ namespace GameDeal_App
                 //Change color to red and warn user
                 copyInputText.BackColor = Color.Red;
                 ccError.Visible = true;
+            }
+        }
+
+        /// <summary>
+        /// Prevents whitespaces
+        /// </summary>
+        /// <param name="sender">Not used</param>
+        /// <param name="e">Not used</param>
+        private void emailInput_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if ( char.IsWhiteSpace(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+
+        /// <summary>
+        /// Prevent whitespaces
+        /// </summary>
+        /// <param name="sender">Not used</param>
+        /// <param name="e">Not used</param>
+        private void copyInputText_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (char.IsWhiteSpace(e.KeyChar))
+            {
+                e.Handled = true;
             }
         }
     }

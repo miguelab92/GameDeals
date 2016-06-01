@@ -97,7 +97,7 @@
             // saveButton
             // 
             this.saveButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.saveButton.Location = new System.Drawing.Point(137, 166);
+            this.saveButton.Location = new System.Drawing.Point(148, 166);
             this.saveButton.Name = "saveButton";
             this.saveButton.Size = new System.Drawing.Size(75, 23);
             this.saveButton.TabIndex = 6;
@@ -112,9 +112,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.emailInput.Location = new System.Drawing.Point(74, 12);
             this.emailInput.Name = "emailInput";
-            this.emailInput.Size = new System.Drawing.Size(160, 20);
+            this.emailInput.Size = new System.Drawing.Size(184, 20);
             this.emailInput.TabIndex = 8;
             this.emailInput.Enter += new System.EventHandler(this.emailInput_Enter);
+            this.emailInput.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.emailInput_KeyPress);
             this.emailInput.Leave += new System.EventHandler(this.emailInput_Leave);
             // 
             // passInput
@@ -125,7 +126,7 @@
             this.passInput.Location = new System.Drawing.Point(74, 48);
             this.passInput.Name = "passInput";
             this.passInput.PasswordChar = '*';
-            this.passInput.Size = new System.Drawing.Size(160, 20);
+            this.passInput.Size = new System.Drawing.Size(184, 20);
             this.passInput.TabIndex = 9;
             this.passInput.Enter += new System.EventHandler(this.passInput_Enter);
             // 
@@ -136,11 +137,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(140, 110);
+            this.label1.Location = new System.Drawing.Point(158, 110);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(94, 12);
+            this.label1.Size = new System.Drawing.Size(100, 12);
             this.label1.TabIndex = 11;
-            this.label1.Text = "Seperate with spaces";
+            this.label1.Text = "Seperate with commas";
             // 
             // copyInputText
             // 
@@ -150,9 +151,10 @@
             this.copyInputText.Enabled = false;
             this.copyInputText.Location = new System.Drawing.Point(74, 87);
             this.copyInputText.Name = "copyInputText";
-            this.copyInputText.Size = new System.Drawing.Size(160, 20);
+            this.copyInputText.Size = new System.Drawing.Size(184, 20);
             this.copyInputText.TabIndex = 10;
             this.copyInputText.Enter += new System.EventHandler(this.copyInputText_Enter);
+            this.copyInputText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.copyInputText_KeyPress);
             this.copyInputText.Leave += new System.EventHandler(this.copyInputText_Leave);
             // 
             // thoroughWarning
@@ -168,7 +170,7 @@
             // testButton
             // 
             this.testButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.testButton.Location = new System.Drawing.Point(35, 166);
+            this.testButton.Location = new System.Drawing.Point(46, 166);
             this.testButton.Name = "testButton";
             this.testButton.Size = new System.Drawing.Size(75, 23);
             this.testButton.TabIndex = 13;
@@ -225,7 +227,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(243, 201);
+            this.ClientSize = new System.Drawing.Size(267, 201);
             this.Controls.Add(this.ccError);
             this.Controls.Add(this.emailError);
             this.Controls.Add(this.passError);
