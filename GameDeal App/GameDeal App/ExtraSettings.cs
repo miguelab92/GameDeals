@@ -14,7 +14,7 @@ namespace GameDeal_App
     public partial class ExtraSettings : Form
     {
         //Name of config file
-        public readonly string APP_FILE = "GameDealsChecker.exe.config";
+        public readonly static string APP_FILE = "GameDealsChecker.exe.config";
 
         //Constructor
         public ExtraSettings()
@@ -81,7 +81,7 @@ namespace GameDeal_App
         /// </summary>
         /// <param name="line">Line with value to get</param>
         /// <returns>Value</returns>
-        private string GetValue(string line)
+        public static string GetValue(string line)
         {
             //value=" is 7 characters long
             int CHARS_TIL_READ = 7;
@@ -111,54 +111,84 @@ namespace GameDeal_App
         /// <param name="e">Not used</param>
         private void saveButton_Click(object sender, EventArgs e)
         {
-            if (validateFields())
+            if (emailInput.Text != "")
             {
-                StreamWriter appFile;
-                StringBuilder tempString = new StringBuilder();
-
-                //Write out copy of config file with added values
-
-                tempString.Append("<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n");
-                tempString.Append("<configuration>\n");
-                tempString.Append("   <startup>\n");
-                tempString.Append("     <supportedRuntime version=\"v4.0\" sku=\".NETFramework,Version=v4.5.2\"\n/>");
-                tempString.Append("   </startup>\n");
-                tempString.Append("  <appSettings>\n");
-                tempString.Append("  <!-- Settings -->\n");
-                tempString.Append("    <add key=\"mailserver\" value=\"smtp.gmail.com\"/>\n");
-                tempString.Append("    <add key=\"portNum\" value=\"587\"/>\n");
-                tempString.Append("    <add key=\"sender\" value=\"");
-                tempString.Append(emailInput.Text);
-                tempString.Append("\"/>\n");
-                tempString.Append("    <add key=\"senderPass\" value=\"");
-                tempString.Append(passInput.Text);
-                tempString.Append("\"/>\n");
-                tempString.Append("    <add key=\"receiver\" value=\"");
-                tempString.Append(emailInput.Text);
-                tempString.Append("\"/>\n");
-                tempString.Append("    <add key=\"CC\" value=\"");
-                //If we should include the copy list
-                if (copyButton.Checked)
+                if (validateFields())
                 {
-                    tempString.Append(copyInputText.Text);
-                }
-                tempString.Append("\"/>\n");
-                tempString.Append("    <add key=\"thoroughSearch\" value=\"");
-                //If thorough search was checked
-                if (thoroughButton.Checked)
-                {
-                    tempString.Append("true");
-                }
-                else
-                {
-                    tempString.Append("false");
-                }
-                tempString.Append("\"/>\n");
-                tempString.Append("    <add key=\"debugging\" value=\"false\"/>\n");
-                tempString.Append("    <add key=\"webPage\" value=\"https://www.reddit.com/r/gamedeals\"/>\n");
-                tempString.Append("  </appSettings>\n");
-                tempString.Append("</configuration>");
+                    StreamWriter appFile;
+                    StringBuilder tempString = new StringBuilder();
 
+                    //Write out copy of config file with added values
+
+                    tempString.Append("<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n");
+                    tempString.Append("<configuration>\n");
+                    tempString.Append("   <startup>\n");
+                    tempString.Append("     <supportedRuntime version=\"v4.0\" sku=\".NETFramework,Version=v4.5.2\"\n/>");
+                    tempString.Append("   </startup>\n");
+                    tempString.Append("  <appSettings>\n");
+                    tempString.Append("  <!-- Settings -->\n");
+                    tempString.Append("    <add key=\"mailserver\" value=\"smtp.gmail.com\"/>\n");
+                    tempString.Append("    <add key=\"portNum\" value=\"587\"/>\n");
+                    tempString.Append("    <add key=\"sender\" value=\"");
+                    tempString.Append(emailInput.Text);
+                    tempString.Append("\"/>\n");
+                    tempString.Append("    <add key=\"senderPass\" value=\"");
+                    tempString.Append(passInput.Text);
+                    tempString.Append("\"/>\n");
+                    tempString.Append("    <add key=\"receiver\" value=\"");
+                    tempString.Append(emailInput.Text);
+                    tempString.Append("\"/>\n");
+                    tempString.Append("    <add key=\"CC\" value=\"");
+                    //If we should include the copy list
+                    if (copyButton.Checked)
+                    {
+                        tempString.Append(copyInputText.Text);
+                    }
+                    tempString.Append("\"/>\n");
+                    tempString.Append("    <add key=\"thoroughSearch\" value=\"");
+                    //If thorough search was checked
+                    if (thoroughButton.Checked)
+                    {
+                        tempString.Append("true");
+                    }
+                    else
+                    {
+                        tempString.Append("false");
+                    }
+                    tempString.Append("\"/>\n");
+                    tempString.Append("    <add key=\"debugging\" value=\"false\"/>\n");
+                    tempString.Append("    <add key=\"webPage\" value=\"https://www.reddit.com/r/gamedeals\"/>\n");
+                    tempString.Append("  </appSettings>\n");
+                    tempString.Append("</configuration>");
+
+                    try
+                    {
+                        //If there is currently a .bat file
+                        if (File.Exists(GameDealApp.SETTINGS_FOLDER + APP_FILE))
+                        {
+                            //Delete it
+                            File.Delete(GameDealApp.SETTINGS_FOLDER + APP_FILE);
+                        }
+                        //Create a new .bat file
+                        appFile = File.AppendText(GameDealApp.SETTINGS_FOLDER + APP_FILE);
+                        //Write out to file
+                        appFile.Write(tempString.ToString());
+                        //Close file
+                        appFile.Close();
+                        //Calls the status check of the GameDealApp main form
+                        (this.Owner as GameDealApp).CheckStatus();
+                        //Close form
+                        this.Close();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                }
+            }
+            else
+            {
+                //If email field is empty assume user wants to delete file
                 try
                 {
                     //If there is currently a .bat file
@@ -167,20 +197,16 @@ namespace GameDeal_App
                         //Delete it
                         File.Delete(GameDealApp.SETTINGS_FOLDER + APP_FILE);
                     }
-                    //Create a new .bat file
-                    appFile = File.AppendText(GameDealApp.SETTINGS_FOLDER + APP_FILE);
-                    //Write out to file
-                    appFile.Write(tempString.ToString());
-                    //Close file
-                    appFile.Close();
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message);
                 }
 
+                //Calls the status check of the GameDealApp main form
+                (this.Owner as GameDealApp).CheckStatus();
                 //Close form
-                this.Close();
+                 this.Close();
             }
         }
 
@@ -265,10 +291,17 @@ namespace GameDeal_App
             {
                 //Enable text box
                 copyInputText.Enabled = true;
+                copyInputText.Visible = true;
+                separationLabel.Visible = true;
+                copyButton.Text = "    CC:";
+                copyInputText.Focus();
             } else
             {
                 //Disable textbox
                 copyInputText.Enabled = false;
+                copyInputText.Visible = false;
+                separationLabel.Visible = false;
+                copyButton.Text = "Send copies to other emails";
                 //If it was errored we also clear text
                 if (copyInputText.BackColor == Color.Red)
                 {
@@ -353,7 +386,7 @@ namespace GameDeal_App
         private void emailInput_Leave(object sender, EventArgs e)
         {
             //Check email and if not valid warn user
-            if (!ValidEmail(emailInput.Text))
+            if (emailInput.Text != "" && !ValidEmail(emailInput.Text))
             {
                 emailInput.BackColor = Color.Red;
                 emailError.Visible = true;

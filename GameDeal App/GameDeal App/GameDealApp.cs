@@ -1,5 +1,5 @@
 ﻿/// @author: Miguel Bermudez
-/// @ver: 2016.05.30
+/// @ver: 2016.06.02
 /// @name: GameDeal app
 /// @desc: Visual form to make the use of GameDealsSearch
 /// app much easier to use
@@ -8,6 +8,14 @@ using System;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Xml;
+using TaskScheduler;
 
 namespace GameDeal_App
 {
@@ -39,14 +47,77 @@ namespace GameDeal_App
             {
                 //Get the current argument list
                 getArgs();
-            } else
+            }
+            else
             {
                 //Create a new BAT
                 if (SaveList())
                 {
                     MessageBox.Show("Welcome first time user! Please make sure you follow " +
-                        "the README file for instructions on how to set up the program correctly.");
+                        "the README file for instructions on how to set up the program correctly.", "Hello!");
                 }
+            }
+
+            //Check status of email and scheduler
+            CheckStatus();
+        }
+
+        /// <summary>
+        /// Checks the status of email and schedule
+        /// </summary>
+        public void CheckStatus()
+        {
+            //Create a new interface for the task scheduler
+            ITaskService taskService = new TaskScheduler.TaskScheduler();
+            taskService.Connect();
+
+            //Get the root folder of scheduled tasks
+            ITaskFolder rootFolder = taskService.GetFolder("\\");
+
+            //Get all registered tasks from folder
+            IRegisteredTaskCollection registeredTasks = rootFolder.GetTasks(0);
+
+            //Holds if we found task
+            bool taskFound = false;
+
+            //For each task inside list of tasks
+            foreach (IRegisteredTask task in registeredTasks)
+            {
+                //If a task matches with this program
+                if (task.Name == Scheduler.TASK_NAME)
+                {
+                    scheduleLabel.BackColor = Color.Green;
+                    taskFound = true;
+                }
+            }
+
+            //If task was not found we change color back
+            if (!taskFound)
+            {
+                scheduleLabel.BackColor = Color.Red;
+            }
+
+            //If the value for sender is not empty
+            if (File.Exists(SETTINGS_FOLDER + ExtraSettings.APP_FILE))
+            {
+                emailLabel.BackColor = Color.Green;
+            }
+            else
+            {
+                emailLabel.BackColor = Color.Red;
+            }
+
+            //Check if both are completed
+            if ( emailLabel.BackColor == Color.Green && scheduleLabel.BackColor == Color.Green )
+            {
+                //Hide if completed
+                emailLabel.Visible = false;
+                scheduleLabel.Visible = false;
+            } else
+            {
+                //Show if incompleted
+                emailLabel.Visible = true;
+                scheduleLabel.Visible = true;
             }
         }
 
@@ -150,6 +221,7 @@ namespace GameDeal_App
                 writter.Close();
                 //Successful save
                 saveSuccessful = true;
+                successLabel.Visible = true;
             }
             catch (Exception ex)
             {
@@ -227,12 +299,20 @@ namespace GameDeal_App
 
                 //Save updated list
                 SaveList();
+                remove.Focus();
             }
             else
             {
+                //If there are games we tell user they must select
                 if (gamesList.Items.Count > 0)
                 {
-                    MessageBox.Show("Select a game from the list to delete");
+                    deleteErrorLabel.Visible = true;
+                    deleteErrorLabel.Focus();
+                } else
+                {
+                    //Otherwise warn user that there is no games
+                    noItemLabel.Visible = true;
+                    noItemLabel.Focus();
                 }
             }
         }
@@ -245,6 +325,7 @@ namespace GameDeal_App
         private void settingsButton_Click(object sender, EventArgs e)
         {
             ExtraSettings settingsCall = new ExtraSettings();
+            settingsCall.Owner = this;
             settingsCall.ShowDialog();
         }
 
@@ -270,8 +351,74 @@ namespace GameDeal_App
         /// <param name="e">Not Used</param>
         private void scheduleButton_Click(object sender, EventArgs e)
         {
-            Scheduler settingsCall = new Scheduler();
-            settingsCall.ShowDialog();
+            Scheduler scheduleCall = new Scheduler();
+            scheduleCall.Owner = this;
+            scheduleCall.ShowDialog();
+        }
+
+        /// <summary>
+        /// Hide the delete error label when user focuses on anything else
+        /// </summary>
+        /// <param name="sender">Not Used</param>
+        /// <param name="e">Not Used</param>
+        private void deleteErrorLabel_Leave(object sender, EventArgs e)
+        {
+            deleteErrorLabel.Visible = false;
+        }
+
+        /// <summary>
+        /// Hide the success label when user focuses on anything
+        /// </summary>
+        /// <param name="sender">Not Used</param>
+        /// <param name="e">Not Used</param>
+        private void inputBox_Leave(object sender, EventArgs e)
+        {
+            successLabel.Visible = false;
+        }
+
+        /// <summary>
+        /// Hide the success label when user focuses on anything
+        /// </summary>
+        /// <param name="sender">Not Used</param>
+        /// <param name="e">Not Used</param>
+        private void remove_Leave(object sender, EventArgs e)
+        {
+            successLabel.Visible = false;
+        }
+
+        /// <summary>
+        /// Hide the error label when user focuses on anything else
+        /// </summary>
+        /// <param name="sender">Not Used</param>
+        /// <param name="e">Not Used</param>
+        private void noItemLabel_Leave(object sender, EventArgs e)
+        {
+            noItemLabel.Visible = false;
+        }
+
+        /// <summary>
+        /// Thank you message from the developer!
+        /// </summary>
+        /// <param name="sender">Not Used</param>
+        /// <param name="e">Not Used</param>
+        private void moreButton_Click(object sender, EventArgs e)
+        {
+            StringBuilder tempString = new StringBuilder();
+
+            tempString.Append("@Author: Miguel Bermudez\n");
+            tempString.Append("@Version: 2016.06.02\n");
+            tempString.Append("\n");
+            tempString.Append("Thank you so much for using this app! ");
+            tempString.Append("Your support is greatly appreciated!\n");
+            tempString.Append("\n");
+            tempString.Append("If you have any questions, concerns or ");
+            tempString.Append("suggestions for future versions, please ");
+            tempString.Append("feel free to contact me at miguelab92@gmail.com\n");
+            tempString.Append("\n");
+            tempString.Append("This is a free open-source app. You can find and help ");
+            tempString.Append("improve the code at github.com/miguelab92/GameDealApp");
+
+            MessageBox.Show(tempString.ToString(), "Thank you!");
         }
     }
 }

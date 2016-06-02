@@ -20,7 +20,7 @@ namespace GameDeal_App
         //Holds task we are working on
         ITaskDefinition newTask;
         //Task name
-        private readonly static string TASK_NAME = "GameDealsChecker";
+        public readonly static string TASK_NAME = "GameDealsChecker";
 
         /// <summary>
         /// Constructor
@@ -54,7 +54,7 @@ namespace GameDeal_App
                 {
                     //Use existing task as base
                     newTask = task.Definition;
-                    taskExistsLabel.BackColor = Color.Green;
+                    taskExistsLabel.BackColor = Color.Lime;
 
                     //Check the trigger(s) for the type and start time/delay
                     foreach (ITrigger trigger in task.Definition.Triggers)
@@ -154,10 +154,14 @@ namespace GameDeal_App
                     null, null, _TASK_LOGON_TYPE.TASK_LOGON_NONE);
 
                 //Task now exists
-                taskExistsLabel.BackColor = Color.Green;
+                taskExistsLabel.BackColor = Color.Lime;
+
+                //Calls the status check of the GameDealApp main form
+                (Owner as GameDealApp).CheckStatus();
 
                 //User feedback
-                MessageBox.Show("Task successfully created!");
+                successLabel.Visible = true;
+                successLabel.Focus();
 
             } catch (Exception ex)
             {
@@ -180,38 +184,35 @@ namespace GameDeal_App
             //Else if the timer button is checked
             else if (timedButton.Checked)
             {
-                //Ensure that either AM or PM is checked
-                if (timeButtonAM.Checked || timeButtonPM.Checked)
+                //Check that time is valid
+                if (ValidTime())
                 {
-                    //Check that time is valid
-                    if (validTime())
+                    try
                     {
-                        try
-                        {
-                            //Get scheduled time
-                            DateTime scheduleTime = DateTime.Parse(timeInputBox.Text);
+                        //Get scheduled time
+                        DateTime scheduleTime = DateTime.Parse(timeInputBox.Text);
 
-                            //Add 12 hours if PM is checked
-                            if (timeButtonPM.Checked)
-                            {
-                                scheduleTime.AddHours(12);
-                            }
-
-                            //Call create scheudle
-                            CreateSchedule(2, scheduleTime);
-                        }
-                        catch (Exception ex)
+                        //Add 12 hours if PM is checked
+                        if (timeButtonPM.Checked)
                         {
-                            //Show error (likely parse)
-                            MessageBox.Show(ex.Message);
+                            scheduleTime.AddHours(12);
                         }
-                    } else
-                    {
-                        MessageBox.Show("Invalid time");
+
+                        //Call create scheudle
+                        CreateSchedule(2, scheduleTime);
                     }
+                    catch (Exception ex)
+                    {
+                        //Show error (likely parse)
+                        MessageBox.Show(ex.Message);
+                    }
+                }
+                else
+                {
                 }
             } else 
             {
+                //Shouldn't get here!
                 MessageBox.Show("Please select a scheduling method");
             }
         }
@@ -220,21 +221,59 @@ namespace GameDeal_App
         /// Validate time
         /// </summary>
         /// <returns>results</returns>
-        private bool validTime ()
+        private bool ValidTime()
         {
+            //Temp holds time
+            StringBuilder tempTime = new StringBuilder();
+
             //Holds results
             bool isValid = false;
 
-            if (timeInputBox.Text != "")
-            {
-                //Check that if we split it by : there are two parts
-                string[] parts = timeInputBox.Text.Split(':');
+            //Check that if we split it by : there are two parts
+            string[] parts = timeInputBox.Text.Split(':');
 
-                if (int.Parse(parts[0]) >= 0 && int.Parse(parts[0]) < 12 &&
-                      int.Parse(parts[1]) >= 0 && int.Parse(parts[1]) < 60)
+            //If either part is an empty string we must rebuild
+            if (parts[0].Trim() == "" || parts[1].Trim() == "") {
+
+                //If hours left empty
+                if (parts[0].Trim() == "")
                 {
-                    isValid = true;
+                    parts[0] = "00";
                 }
+
+                //Append hours and :
+                tempTime.Append(parts[0]);
+                tempTime.Append(':');
+
+                //If minutes left empty
+                if (parts[1].Trim() == "")
+                {
+                    parts[1] = "00";
+                }
+
+                //Appends minutes
+                tempTime.Append(parts[1]);
+                //Save new text
+                timeInputBox.Text = tempTime.ToString();
+
+                //Split again with new text
+                parts = timeInputBox.Text.Split(':');
+            }
+
+            //If the hours are not between 0-11 and the minutes are not between 0-59
+            if (int.Parse(parts[0]) >= 0 && int.Parse(parts[0]) < 12 &&
+                  int.Parse(parts[1]) >= 0 && int.Parse(parts[1]) < 60)
+            {
+                isValid = true;
+            }
+
+            //If not valid error
+            if (!isValid)
+            {
+                //Show invalid time label
+                invalidTimeLabel.Visible = true;
+                invalidTimeLabel.Focus();
+                timeInputBox.BackColor = Color.Red;
             }
 
             //Return results
@@ -249,9 +288,8 @@ namespace GameDeal_App
         private void deleteScheduleButton_Click(object sender, EventArgs e)
         {
             //First be sure task exists
-            if (taskExistsLabel.BackColor == Color.Green)
+            if (taskExistsLabel.BackColor == Color.Lime)
             {
-                //Create a new interface for the task scheduler
                 ITaskService taskService = new TaskScheduler.TaskScheduler();
                 taskService.Connect();
 
@@ -261,8 +299,14 @@ namespace GameDeal_App
                 {
                     //Delete task
                     taskFolder.DeleteTask(TASK_NAME, 0);
-                    MessageBox.Show("Task successfully deleted!");
+
+                    //Calls the status check of the GameDealApp main form
+                    (Owner as GameDealApp).CheckStatus();
+
+                    //Update labels
                     taskExistsLabel.BackColor = Color.Red;
+                    successLabel.Visible = true;
+                    successLabel.Focus();
                 }
                 catch (Exception ex)
                 {
@@ -270,9 +314,10 @@ namespace GameDeal_App
                 }
             } else
             {
-                MessageBox.Show("No task to delete!");
+                //Show error label and give it focus
+                deleteErrorLabel.Visible = true;
+                deleteErrorLabel.Focus();
             }
-
         }
 
         /// <summary>
@@ -302,12 +347,79 @@ namespace GameDeal_App
                 timeInputBox.Enabled = true;
                 timeButtonAM.Enabled = true;
                 timeButtonPM.Enabled = true;
+                timeGroup.Visible = true;
+                timeInputBox.Visible = true;
+                timeFormatLabel.Visible = true;
+                scheduleWarningLabel.Visible = true;
+
+                //Default to AM if nothing else was checked
+                if ( timeButtonAM.Checked == false && timeButtonPM.Checked == false )
+                {
+                    timeButtonAM.Checked = true;
+                }
+
+                timeInputBox.Focus();
             } else
             {
                 timeInputBox.Enabled = false;
                 timeButtonAM.Enabled = false;
                 timeButtonPM.Enabled = false;
+                timeGroup.Visible = false;
+                timeInputBox.Visible = false;
+                timeFormatLabel.Visible = false;
+                scheduleWarningLabel.Visible = false;
             }
+        }
+
+        /// <summary>
+        /// If user focuses on anything but the label
+        /// </summary>
+        /// <param name="sender">Not Used</param>
+        /// <param name="e">Not Used</param>
+        private void successLabel_Leave(object sender, EventArgs e)
+        {
+            successLabel.Visible = false;
+        }
+
+        /// <summary>
+        /// If user focuses on anything but the label
+        /// </summary>
+        /// <param name="sender">Not Used</param>
+        /// <param name="e">Not Used</param>
+        private void deleteErrorLabel_Leave(object sender, EventArgs e)
+        {
+            deleteErrorLabel.Visible = false;
+        }
+
+        /// <summary>
+        /// If user focuses on anything but the label
+        /// </summary>
+        /// <param name="sender">Not Used</param>
+        /// <param name="e">Not Used</param>
+        private void invalidTimeLabel_Leave(object sender, EventArgs e)
+        {
+            invalidTimeLabel.Visible = false;
+        }
+
+        /// <summary>
+        /// Clears out error
+        /// </summary>
+        /// <param name="sender">Not Used</param>
+        /// <param name="e">Not Used</param>
+        private void timeInputBox_Enter(object sender, EventArgs e)
+        {
+            timeInputBox.BackColor = Color.White;
+        }
+
+        /// <summary>
+        /// Checks that time is valid and if not errors out
+        /// </summary>
+        /// <param name="sender">Not Used</param>
+        /// <param name="e">Not Used</param>
+        private void timeInputBox_Leave(object sender, EventArgs e)
+        {
+            //Validate the time
+            ValidTime();
         }
     }
 }
