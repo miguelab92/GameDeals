@@ -43,6 +43,7 @@
             this.scheduleLabel = new System.Windows.Forms.Label();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.moreButton = new System.Windows.Forms.Button();
+            this.gameInListError = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // listBoxLabel
@@ -94,6 +95,7 @@
             this.inputBox.Name = "inputBox";
             this.inputBox.Size = new System.Drawing.Size(119, 20);
             this.inputBox.TabIndex = 0;
+            this.inputBox.Enter += new System.EventHandler(this.inputBox_Enter);
             this.inputBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.inputBox_KeyDown);
             this.inputBox.Leave += new System.EventHandler(this.inputBox_Leave);
             // 
@@ -145,6 +147,7 @@
             this.successLabel.TabIndex = 7;
             this.successLabel.Text = "Successfully updated";
             this.successLabel.Visible = false;
+            this.successLabel.VisibleChanged += new System.EventHandler(this.successLabel_VisibleChanged);
             // 
             // noItemLabel
             // 
@@ -189,16 +192,31 @@
             this.moreButton.Name = "moreButton";
             this.moreButton.Size = new System.Drawing.Size(13, 23);
             this.moreButton.TabIndex = 11;
+            this.moreButton.TabStop = false;
             this.moreButton.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.toolTip.SetToolTip(this.moreButton, "App info");
             this.moreButton.UseVisualStyleBackColor = false;
             this.moreButton.Click += new System.EventHandler(this.moreButton_Click);
+            // 
+            // gameInListError
+            // 
+            this.gameInListError.AutoSize = true;
+            this.gameInListError.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.gameInListError.ForeColor = System.Drawing.Color.Red;
+            this.gameInListError.Location = new System.Drawing.Point(146, 12);
+            this.gameInListError.Name = "gameInListError";
+            this.gameInListError.Size = new System.Drawing.Size(94, 12);
+            this.gameInListError.TabIndex = 12;
+            this.gameInListError.Text = "Game is already in list";
+            this.gameInListError.Visible = false;
+            this.gameInListError.VisibleChanged += new System.EventHandler(this.gameInListError_VisibleChanged);
             // 
             // GameDealApp
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(252, 247);
+            this.Controls.Add(this.gameInListError);
             this.Controls.Add(this.moreButton);
             this.Controls.Add(this.scheduleLabel);
             this.Controls.Add(this.emailLabel);
@@ -237,6 +255,7 @@
         private System.Windows.Forms.Label scheduleLabel;
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.Button moreButton;
+        private System.Windows.Forms.Label gameInListError;
     }
 }
 
