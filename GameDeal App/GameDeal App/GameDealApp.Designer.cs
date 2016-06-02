@@ -55,7 +55,7 @@
             this.gamesList.Location = new System.Drawing.Point(12, 25);
             this.gamesList.Name = "gamesList";
             this.gamesList.Size = new System.Drawing.Size(228, 147);
-            this.gamesList.TabIndex = 1;
+            this.gamesList.TabIndex = 5;
             // 
             // addButton
             // 
@@ -63,7 +63,7 @@
             this.addButton.Location = new System.Drawing.Point(137, 177);
             this.addButton.Name = "addButton";
             this.addButton.Size = new System.Drawing.Size(36, 20);
-            this.addButton.TabIndex = 2;
+            this.addButton.TabIndex = 1;
             this.addButton.Text = "Add";
             this.addButton.UseVisualStyleBackColor = true;
             this.addButton.Click += new System.EventHandler(this.addButton_Click);
@@ -74,7 +74,7 @@
             this.remove.Location = new System.Drawing.Point(209, 177);
             this.remove.Name = "remove";
             this.remove.Size = new System.Drawing.Size(31, 20);
-            this.remove.TabIndex = 3;
+            this.remove.TabIndex = 2;
             this.remove.Text = "Del";
             this.remove.UseVisualStyleBackColor = true;
             this.remove.Click += new System.EventHandler(this.remove_Click);
@@ -94,7 +94,7 @@
             this.settingsButton.Location = new System.Drawing.Point(39, 212);
             this.settingsButton.Name = "settingsButton";
             this.settingsButton.Size = new System.Drawing.Size(75, 23);
-            this.settingsButton.TabIndex = 5;
+            this.settingsButton.TabIndex = 3;
             this.settingsButton.Text = "Email Set-up";
             this.settingsButton.UseVisualStyleBackColor = true;
             this.settingsButton.Click += new System.EventHandler(this.settingsButton_Click);
@@ -105,7 +105,7 @@
             this.scheduleButton.Location = new System.Drawing.Point(149, 212);
             this.scheduleButton.Name = "scheduleButton";
             this.scheduleButton.Size = new System.Drawing.Size(75, 23);
-            this.scheduleButton.TabIndex = 7;
+            this.scheduleButton.TabIndex = 4;
             this.scheduleButton.Text = "Schedule";
             this.scheduleButton.UseVisualStyleBackColor = true;
             this.scheduleButton.Click += new System.EventHandler(this.scheduleButton_Click);

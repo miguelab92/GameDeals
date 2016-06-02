@@ -13,8 +13,11 @@ namespace GameDeal_App
 {
     public partial class GameDealApp : Form
     {
+        //Path to a subfolder called Processes
+        public readonly static string SETTINGS_FOLDER = 
+            Application.StartupPath + "/Processes/";
         //Name of .bat file
-        private static string BAT_FILE = "GameDealsChecker.bat";
+        public readonly static string BAT_FILE = "GameDealsChecker.bat";
 
         /// <summary>
         /// Constructor
@@ -32,7 +35,7 @@ namespace GameDeal_App
         private void GameDealApp_Load(object sender, EventArgs e)
         {
             //If there is a previous BAT file
-            if (File.Exists(BAT_FILE))
+            if (File.Exists(SETTINGS_FOLDER + BAT_FILE))
             {
                 //Get the current argument list
                 getArgs();
@@ -58,7 +61,7 @@ namespace GameDeal_App
             StringBuilder tempStr = new StringBuilder();
 
             //The text of the BAT file
-            string batFile = File.ReadAllText(BAT_FILE);
+            string batFile = File.ReadAllText(SETTINGS_FOLDER + BAT_FILE);
 
             //For each letter in the BAT file
             foreach (char letter in batFile)
@@ -132,13 +135,13 @@ namespace GameDeal_App
             try
             {
                 //If BAT exists we delete it
-                if (File.Exists(BAT_FILE))
+                if (File.Exists(SETTINGS_FOLDER + BAT_FILE))
                 {
-                    File.Delete(BAT_FILE);
+                    File.Delete(SETTINGS_FOLDER + BAT_FILE);
                 }
                 
                 //Create a new stream writter to the new BAT file
-                StreamWriter writter = File.AppendText(BAT_FILE);
+                StreamWriter writter = File.AppendText(SETTINGS_FOLDER + BAT_FILE);
                 //Write the first line
                 writter.WriteLine("@ECHO");
                 //Write the build string with exe and arguments

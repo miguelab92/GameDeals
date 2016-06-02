@@ -19,7 +19,6 @@ namespace GameDeal_App
     {
         //Holds task we are working on
         ITaskDefinition newTask;
-
         //Task name
         private readonly static string TASK_NAME = "GameDealsChecker";
 
@@ -146,8 +145,8 @@ namespace GameDeal_App
             execAction = action as IExecAction;
 
             //Run path + GameDealsChecker.bat from folder path
-            execAction.Path = AppDomain.CurrentDomain.BaseDirectory + "GameDealsChecker.bat";
-            execAction.WorkingDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            execAction.Path = GameDealApp.SETTINGS_FOLDER + GameDealApp.BAT_FILE;
+            execAction.WorkingDirectory = GameDealApp.SETTINGS_FOLDER;
 
             try {
                 //Same task name to update old one. 6 means update or create!
@@ -181,7 +180,7 @@ namespace GameDeal_App
             //Else if the timer button is checked
             else if (timedButton.Checked)
             {
-                //Ensure at least one of AM or PM is checked
+                //Ensure that either AM or PM is checked
                 if (timeButtonAM.Checked || timeButtonPM.Checked)
                 {
                     //Check that time is valid
@@ -309,11 +308,6 @@ namespace GameDeal_App
                 timeButtonAM.Enabled = false;
                 timeButtonPM.Enabled = false;
             }
-        }
-
-        private void taskExistsLabel_MouseHover(object sender, EventArgs e)
-        {
-
         }
     }
 }

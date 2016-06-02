@@ -47,11 +47,12 @@
             // 
             // scheduleButton
             // 
+            this.scheduleButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.scheduleButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.scheduleButton.Location = new System.Drawing.Point(20, 112);
             this.scheduleButton.Name = "scheduleButton";
             this.scheduleButton.Size = new System.Drawing.Size(119, 27);
-            this.scheduleButton.TabIndex = 0;
+            this.scheduleButton.TabIndex = 6;
             this.scheduleButton.Text = "Save Schedule";
             this.scheduleButton.UseVisualStyleBackColor = true;
             this.scheduleButton.Click += new System.EventHandler(this.scheduleButton_Click);
@@ -70,6 +71,7 @@
             // 
             // timedButton
             // 
+            this.timedButton.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.timedButton.AutoSize = true;
             this.timedButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.timedButton.Location = new System.Drawing.Point(12, 61);
@@ -94,6 +96,7 @@
             // 
             // ScheduleWarningLabel
             // 
+            this.ScheduleWarningLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.ScheduleWarningLabel.AutoSize = true;
             this.ScheduleWarningLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ScheduleWarningLabel.ForeColor = System.Drawing.Color.Olive;
@@ -111,7 +114,7 @@
             this.timeButtonAM.Location = new System.Drawing.Point(6, 11);
             this.timeButtonAM.Name = "timeButtonAM";
             this.timeButtonAM.Size = new System.Drawing.Size(39, 16);
-            this.timeButtonAM.TabIndex = 7;
+            this.timeButtonAM.TabIndex = 4;
             this.timeButtonAM.TabStop = true;
             this.timeButtonAM.Text = "AM";
             this.timeButtonAM.UseVisualStyleBackColor = true;
@@ -124,13 +127,14 @@
             this.timeButtonPM.Location = new System.Drawing.Point(6, 29);
             this.timeButtonPM.Name = "timeButtonPM";
             this.timeButtonPM.Size = new System.Drawing.Size(38, 16);
-            this.timeButtonPM.TabIndex = 8;
+            this.timeButtonPM.TabIndex = 5;
             this.timeButtonPM.TabStop = true;
             this.timeButtonPM.Text = "PM";
             this.timeButtonPM.UseVisualStyleBackColor = true;
             // 
             // label2
             // 
+            this.label2.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(170, 55);
@@ -141,28 +145,31 @@
             // 
             // deleteScheduleButton
             // 
+            this.deleteScheduleButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.deleteScheduleButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.deleteScheduleButton.Location = new System.Drawing.Point(162, 112);
             this.deleteScheduleButton.Name = "deleteScheduleButton";
             this.deleteScheduleButton.Size = new System.Drawing.Size(119, 27);
-            this.deleteScheduleButton.TabIndex = 11;
+            this.deleteScheduleButton.TabIndex = 7;
             this.deleteScheduleButton.Text = "Delete Schedule";
             this.deleteScheduleButton.UseVisualStyleBackColor = true;
             this.deleteScheduleButton.Click += new System.EventHandler(this.deleteScheduleButton_Click);
             // 
             // timeInputBox
             // 
+            this.timeInputBox.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.timeInputBox.Enabled = false;
             this.timeInputBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.timeInputBox.Location = new System.Drawing.Point(162, 70);
             this.timeInputBox.Name = "timeInputBox";
             this.timeInputBox.Size = new System.Drawing.Size(57, 21);
-            this.timeInputBox.TabIndex = 12;
+            this.timeInputBox.TabIndex = 3;
             this.timeInputBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.timeInputBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.timeInputBox_KeyPress);
             // 
             // timeGroup
             // 
+            this.timeGroup.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.timeGroup.Controls.Add(this.timeButtonAM);
             this.timeGroup.Controls.Add(this.timeButtonPM);
             this.timeGroup.Location = new System.Drawing.Point(237, 49);
@@ -173,6 +180,7 @@
             // 
             // taskExistsLabel
             // 
+            this.taskExistsLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.taskExistsLabel.BackColor = System.Drawing.Color.Red;
             this.taskExistsLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.taskExistsLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -183,7 +191,6 @@
             this.taskExistsLabel.TabIndex = 15;
             this.toolTip.SetToolTip(this.taskExistsLabel, "Color shows if schedule currently exists. (Red = No schedule, Green = Schedule Ex" +
         "ists).");
-            this.taskExistsLabel.MouseHover += new System.EventHandler(this.taskExistsLabel_MouseHover);
             // 
             // Scheduler
             // 
@@ -200,6 +207,7 @@
             this.Controls.Add(this.timedButton);
             this.Controls.Add(this.startupButton);
             this.Controls.Add(this.scheduleButton);
+            this.MaximumSize = new System.Drawing.Size(308, 1080);
             this.MinimumSize = new System.Drawing.Size(308, 187);
             this.Name = "Scheduler";
             this.Text = "Scheduler";

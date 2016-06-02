@@ -77,7 +77,7 @@
             this.copyButton.Location = new System.Drawing.Point(15, 87);
             this.copyButton.Name = "copyButton";
             this.copyButton.Size = new System.Drawing.Size(55, 17);
-            this.copyButton.TabIndex = 3;
+            this.copyButton.TabIndex = 10;
             this.copyButton.Text = "    CC:";
             this.copyButton.UseVisualStyleBackColor = true;
             this.copyButton.CheckedChanged += new System.EventHandler(this.copyButton_CheckedChanged);
@@ -89,7 +89,7 @@
             this.thoroughButton.Location = new System.Drawing.Point(15, 136);
             this.thoroughButton.Name = "thoroughButton";
             this.thoroughButton.Size = new System.Drawing.Size(115, 17);
-            this.thoroughButton.TabIndex = 5;
+            this.thoroughButton.TabIndex = 12;
             this.thoroughButton.Text = "Thorough Search?";
             this.thoroughButton.UseVisualStyleBackColor = true;
             this.thoroughButton.CheckedChanged += new System.EventHandler(this.thoroughButton_CheckedChanged);
@@ -100,7 +100,7 @@
             this.saveButton.Location = new System.Drawing.Point(148, 166);
             this.saveButton.Name = "saveButton";
             this.saveButton.Size = new System.Drawing.Size(75, 23);
-            this.saveButton.TabIndex = 6;
+            this.saveButton.TabIndex = 14;
             this.saveButton.Text = "Save";
             this.saveButton.UseVisualStyleBackColor = true;
             this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
@@ -152,7 +152,7 @@
             this.copyInputText.Location = new System.Drawing.Point(74, 87);
             this.copyInputText.Name = "copyInputText";
             this.copyInputText.Size = new System.Drawing.Size(184, 20);
-            this.copyInputText.TabIndex = 10;
+            this.copyInputText.TabIndex = 11;
             this.copyInputText.Enter += new System.EventHandler(this.copyInputText_Enter);
             this.copyInputText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.copyInputText_KeyPress);
             this.copyInputText.Leave += new System.EventHandler(this.copyInputText_Leave);

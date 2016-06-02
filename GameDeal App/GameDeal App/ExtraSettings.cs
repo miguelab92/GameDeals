@@ -8,14 +8,13 @@ using System.Text;
 using System.Windows.Forms;
 using System.Net;
 using System.Net.Mail;
-using Logger;
 
 namespace GameDeal_App
 {
     public partial class ExtraSettings : Form
     {
         //Name of config file
-        private readonly string APP_FILE = "GameDealsChecker.exe.config";
+        public readonly string APP_FILE = "GameDealsChecker.exe.config";
 
         //Constructor
         public ExtraSettings()
@@ -30,10 +29,10 @@ namespace GameDeal_App
         private void GetData()
         {
             //If file already exists we can read
-            if ( File.Exists(APP_FILE))
+            if ( File.Exists(GameDealApp.SETTINGS_FOLDER + APP_FILE))
             {
                 //Parse into lines
-                string[] configFile = File.ReadAllLines(APP_FILE);
+                string[] configFile = File.ReadAllLines(GameDealApp.SETTINGS_FOLDER + APP_FILE);
 
                 //For each line in the parsed file
                 foreach (string line in configFile )
@@ -97,9 +96,8 @@ namespace GameDeal_App
             //While the " hasn't been closed
             while (line[indx] != '"')
             {
-                //Append to tempText
-                tempText.Append(line[indx]);
-                ++indx;
+                //Append to tempText and increase index
+                tempText.Append(line[indx++]);
             }
 
             //Return value
@@ -164,13 +162,13 @@ namespace GameDeal_App
                 try
                 {
                     //If there is currently a .bat file
-                    if (File.Exists(APP_FILE))
+                    if (File.Exists(GameDealApp.SETTINGS_FOLDER + APP_FILE))
                     {
                         //Delete it
-                        File.Delete(APP_FILE);
+                        File.Delete(GameDealApp.SETTINGS_FOLDER + APP_FILE);
                     }
                     //Create a new .bat file
-                    appFile = File.AppendText(APP_FILE);
+                    appFile = File.AppendText(GameDealApp.SETTINGS_FOLDER + APP_FILE);
                     //Write out to file
                     appFile.Write(tempString.ToString());
                     //Close file
@@ -309,24 +307,21 @@ namespace GameDeal_App
         {
             if (validateFields())
             {
-                //Temp test log
-                LogFile testLog = new LogFile("GameDeal App Test");
-
                 //Set up MailMessage based on input
                 MailMessage testMsg = new MailMessage(emailInput.Text, emailInput.Text);
                 testMsg.Subject = "GameDeal App Test";
                 testMsg.IsBodyHtml = true;
+                testMsg.Body = "Success! Email is working as intended!";
 
                 //Set up SmtpClient based on input
                 SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
                 client.Credentials = new NetworkCredential(emailInput.Text, passInput.Text);
                 client.EnableSsl = true;
 
-                //Try to mail
                 try
                 {
                     //Try to mail
-                    testLog.MailLog(client, testMsg);
+                    client.Send(testMsg);
                     //Dispose of opened resources
                     testMsg.Dispose();
                     MessageBox.Show("Test email send. Please check your inbox (allow up to a few minutes)");
