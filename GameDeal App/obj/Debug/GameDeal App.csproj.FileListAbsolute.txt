@@ -1,0 +1,3 @@
+C:\Users\BermudezM1\Documents\Visual Studio 2015\Projects\GameDealApp-master\GameDeal App\GameDeal App\bin\Debug\GameDeal App.exe.config
+C:\Users\BermudezM1\Documents\Visual Studio 2015\Projects\GameDealApp-master\GameDeal App\GameDeal App\obj\Debug\Interop.TaskScheduler.dll
+C:\Users\BermudezM1\Documents\Visual Studio 2015\Projects\GameDealApp-master\GameDeal App\GameDeal App\obj\Debug\GameDeal App.csproj.ResolveComReference.cache

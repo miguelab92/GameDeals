@@ -1,5 +1,5 @@
 ﻿/// @author: Miguel Bermudez
-/// @ver: 2016.06.13
+/// @ver: 2016.06.15 - v1.0
 /// @name: GameDeal app
 /// @desc: Visual form to make the use of GameDealsSearch
 /// app much easier to use
@@ -78,7 +78,8 @@ namespace GameDeal_App
                     else
                     {
                         //Missing program exe
-                        MessageBox.Show("Missing necessary .exe file in Processes folder.");
+                        MessageBox.Show("Missing necessary GameDealsChecker.exe file in Processes folder."
+                            , "Missing GameDealsChecker");
                     }
                 }
                 else
@@ -502,7 +503,7 @@ namespace GameDeal_App
             StringBuilder tempString = new StringBuilder();
 
             tempString.Append("@Author: Miguel Bermudez\n");
-            tempString.Append("@Version: 2016.06.02\n");
+            tempString.Append("@Version: v1.0\n");
             tempString.Append("\n");
             tempString.Append("Thank you so much for using this app! ");
             tempString.Append("Your support is greatly appreciated!\n");

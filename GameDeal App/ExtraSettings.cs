@@ -38,7 +38,7 @@ namespace GameDeal_App
                 foreach (string line in configFile )
                 {
                     //If it contains sender then we look for email
-                    if (line.Contains("sender\"")) {
+                    if (line.Contains("receiver")) {
                         emailInput.Text = GetValue(line);
                     }
 
@@ -52,6 +52,7 @@ namespace GameDeal_App
                             copyButton.Checked = true;
                         }
                     }
+
                     //If line contains thoroughSearch then we check it
                     if (line.Contains("thoroughSearch"))
                     {
