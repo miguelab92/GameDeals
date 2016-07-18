@@ -1,3 +1,16 @@
 C:\Users\BermudezM1\Documents\Visual Studio 2015\Projects\GameDealApp-master\GameDeal App\GameDeal App\bin\Debug\GameDeal App.exe.config
 C:\Users\BermudezM1\Documents\Visual Studio 2015\Projects\GameDealApp-master\GameDeal App\GameDeal App\obj\Debug\Interop.TaskScheduler.dll
 C:\Users\BermudezM1\Documents\Visual Studio 2015\Projects\GameDealApp-master\GameDeal App\GameDeal App\obj\Debug\GameDeal App.csproj.ResolveComReference.cache
+C:\dev\Sources\GameDealApp\GameDeal App\bin\Debug\GameDeal App.exe.config
+C:\dev\Sources\GameDealApp\GameDeal App\obj\Debug\Interop.TaskScheduler.dll
+C:\dev\Sources\GameDealApp\GameDeal App\obj\Debug\GameDeal App.csproj.ResolveComReference.cache
+C:\dev\Sources\GameDealApp\GameDeal App\obj\Debug\GameDeal App.csprojResolveAssemblyReference.cache
+C:\dev\Sources\GameDealApp\GameDeal App\obj\Debug\GameDeal_App.ExtraSettings.resources
+C:\dev\Sources\GameDealApp\GameDeal App\obj\Debug\GameDeal_App.GameDealApp.resources
+C:\dev\Sources\GameDealApp\GameDeal App\obj\Debug\GameDeal_App.Properties.Resources.resources
+C:\dev\Sources\GameDealApp\GameDeal App\obj\Debug\GameDeal_App.Scheduler.resources
+C:\dev\Sources\GameDealApp\GameDeal App\obj\Debug\GameDeal App.csproj.GenerateResource.Cache
+C:\dev\Sources\GameDealApp\GameDeal App\bin\Debug\GameDeal App.exe
+C:\dev\Sources\GameDealApp\GameDeal App\bin\Debug\GameDeal App.pdb
+C:\dev\Sources\GameDealApp\GameDeal App\obj\Debug\GameDeal App.exe
+C:\dev\Sources\GameDealApp\GameDeal App\obj\Debug\GameDeal App.pdb

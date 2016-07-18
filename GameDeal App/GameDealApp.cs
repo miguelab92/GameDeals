@@ -1,5 +1,5 @@
 ﻿/// @author: Miguel Bermudez
-/// @ver: 2016.06.15 - v1.0
+/// @ver: 2016.07.18 - v1.0
 /// @name: GameDeal app
 /// @desc: Visual form to make the use of GameDealsSearch
 /// app much easier to use

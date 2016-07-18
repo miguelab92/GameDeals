@@ -52,23 +52,6 @@ namespace GameDeal_App
                             copyButton.Checked = true;
                         }
                     }
-
-                    //If line contains thoroughSearch then we check it
-                    if (line.Contains("thoroughSearch"))
-                    {
-                        try {
-                            //Check if thorough search was checked or not
-                            if (Convert.ToBoolean(GetValue(line)))
-                            {
-                                thoroughButton.Checked = true;
-                            }
-                        }
-                        //User might have messed with formatting. Can be
-                        //ignored as we still highly recommend false
-                        catch
-                        {
-                        }
-                    }
                 }
             } 
         }
@@ -134,19 +117,6 @@ namespace GameDeal_App
                         tempString.Append(copyInputText.Text);
                     }
                     tempString.Append("\"/>\n");
-                    tempString.Append("    <add key=\"thoroughSearch\" value=\"");
-                    //If thorough search was checked
-                    if (thoroughButton.Checked)
-                    {
-                        tempString.Append("true");
-                    }
-                    else
-                    {
-                        tempString.Append("false");
-                    }
-                    tempString.Append("\"/>\n");
-                    tempString.Append("    <add key=\"debugging\" value=\"false\"/>\n");
-                    tempString.Append("    <add key=\"webPage\" value=\"https://www.reddit.com/r/gamedeals\"/>\n");
                     tempString.Append("  </appSettings>\n");
                     tempString.Append("</configuration>");
 
@@ -294,24 +264,6 @@ namespace GameDeal_App
                     ccError.Visible = false;
                     copyInputText.BackColor = Color.White;
                 }
-            }
-        }
-
-
-        /// <summary>
-        /// If thorough search was changed
-        /// </summary>
-        /// <param name="sender">Not used</param>
-        /// <param name="e">Not used</param>
-        private void thoroughButton_CheckedChanged(object sender, EventArgs e)
-        {
-            //If it was checked then we WARN them again
-            if (thoroughButton.Checked)
-            {
-                thoroughWarning.ForeColor = Color.Red;
-            } else
-            {
-                thoroughWarning.ForeColor = Color.Black;
             }
         }
 

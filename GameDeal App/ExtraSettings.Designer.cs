@@ -31,12 +31,10 @@
             this.components = new System.ComponentModel.Container();
             this.emailLabel = new System.Windows.Forms.Label();
             this.copyButton = new System.Windows.Forms.CheckBox();
-            this.thoroughButton = new System.Windows.Forms.CheckBox();
             this.saveButton = new System.Windows.Forms.Button();
             this.emailInput = new System.Windows.Forms.TextBox();
             this.separationLabel = new System.Windows.Forms.Label();
             this.copyInputText = new System.Windows.Forms.TextBox();
-            this.thoroughWarning = new System.Windows.Forms.Label();
             this.emailError = new System.Windows.Forms.Label();
             this.ccError = new System.Windows.Forms.Label();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -66,24 +64,10 @@
             this.copyButton.UseVisualStyleBackColor = true;
             this.copyButton.CheckedChanged += new System.EventHandler(this.copyButton_CheckedChanged);
             // 
-            // thoroughButton
-            // 
-            this.thoroughButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.thoroughButton.AutoSize = true;
-            this.thoroughButton.Location = new System.Drawing.Point(15, 82);
-            this.thoroughButton.Name = "thoroughButton";
-            this.thoroughButton.Size = new System.Drawing.Size(109, 17);
-            this.thoroughButton.TabIndex = 12;
-            this.thoroughButton.Text = "Thorough Search";
-            this.toolTip.SetToolTip(this.thoroughButton, "Might cause false negative on short game titles (ex: sfv might be found in a link" +
-        ", not a sale)");
-            this.thoroughButton.UseVisualStyleBackColor = true;
-            this.thoroughButton.CheckedChanged += new System.EventHandler(this.thoroughButton_CheckedChanged);
-            // 
             // saveButton
             // 
             this.saveButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.saveButton.Location = new System.Drawing.Point(37, 118);
+            this.saveButton.Location = new System.Drawing.Point(42, 93);
             this.saveButton.Name = "saveButton";
             this.saveButton.Size = new System.Drawing.Size(75, 23);
             this.saveButton.TabIndex = 13;
@@ -129,18 +113,6 @@
             this.copyInputText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.copyInputText_KeyPress);
             this.copyInputText.Leave += new System.EventHandler(this.copyInputText_Leave);
             // 
-            // thoroughWarning
-            // 
-            this.thoroughWarning.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.thoroughWarning.AutoSize = true;
-            this.thoroughWarning.Location = new System.Drawing.Point(120, 83);
-            this.thoroughWarning.Name = "thoroughWarning";
-            this.thoroughWarning.Size = new System.Drawing.Size(122, 13);
-            this.thoroughWarning.TabIndex = 12;
-            this.thoroughWarning.Text = "(RECOMMENDED OFF)";
-            this.toolTip.SetToolTip(this.thoroughWarning, "Might cause false negative on short game titles (ex: sfv might be found in a link" +
-        ", not a sale)");
-            // 
             // emailError
             // 
             this.emailError.Anchor = System.Windows.Forms.AnchorStyles.Top;
@@ -170,7 +142,7 @@
             // testButton
             // 
             this.testButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.testButton.Location = new System.Drawing.Point(148, 118);
+            this.testButton.Location = new System.Drawing.Point(153, 93);
             this.testButton.Name = "testButton";
             this.testButton.Size = new System.Drawing.Size(75, 23);
             this.testButton.TabIndex = 14;
@@ -183,20 +155,18 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(267, 153);
+            this.ClientSize = new System.Drawing.Size(267, 123);
             this.Controls.Add(this.ccError);
             this.Controls.Add(this.emailError);
             this.Controls.Add(this.testButton);
-            this.Controls.Add(this.thoroughWarning);
             this.Controls.Add(this.separationLabel);
             this.Controls.Add(this.copyInputText);
             this.Controls.Add(this.emailInput);
             this.Controls.Add(this.saveButton);
-            this.Controls.Add(this.thoroughButton);
             this.Controls.Add(this.copyButton);
             this.Controls.Add(this.emailLabel);
-            this.MaximumSize = new System.Drawing.Size(1080, 232);
-            this.MinimumSize = new System.Drawing.Size(279, 180);
+            this.MaximumSize = new System.Drawing.Size(1080, 154);
+            this.MinimumSize = new System.Drawing.Size(279, 154);
             this.Name = "ExtraSettings";
             this.Text = "App settings";
             this.ResumeLayout(false);
@@ -208,12 +178,10 @@
 
         private System.Windows.Forms.Label emailLabel;
         private System.Windows.Forms.CheckBox copyButton;
-        private System.Windows.Forms.CheckBox thoroughButton;
         private System.Windows.Forms.Button saveButton;
         private System.Windows.Forms.TextBox emailInput;
         private System.Windows.Forms.Label separationLabel;
         private System.Windows.Forms.TextBox copyInputText;
-        private System.Windows.Forms.Label thoroughWarning;
         private System.Windows.Forms.Label emailError;
         private System.Windows.Forms.Label ccError;
         private System.Windows.Forms.ToolTip toolTip;
