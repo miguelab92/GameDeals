@@ -151,8 +151,8 @@ namespace GameDealsChecker
             //Create the SMTP Client and set all the setting from app
             smtpC = new SmtpClient("smtp.gmail.com", 587);
 
-            //Enter your credentials here to send the email (*!* is a placeholder)
-            smtpC.Credentials = new NetworkCredential("GameDealsChecker@gmail.com", *!* );
+            //Enter your credentials here to send the email (* is a placeholder)
+            smtpC.Credentials = new NetworkCredential("GameDealsChecker@gmail.com", "*" );
             smtpC.EnableSsl = true;
 
             //Create MailMessage and set all the setting from app
