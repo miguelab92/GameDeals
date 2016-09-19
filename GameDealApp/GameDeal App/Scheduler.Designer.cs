@@ -45,6 +45,7 @@
             this.successLabel = new System.Windows.Forms.Label();
             this.deleteErrorLabel = new System.Windows.Forms.Label();
             this.invalidTimeLabel = new System.Windows.Forms.Label();
+            this.taskExistsError = new System.Windows.Forms.Label();
             this.timeGroup.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -243,11 +244,25 @@
             this.invalidTimeLabel.Visible = false;
             this.invalidTimeLabel.Leave += new System.EventHandler(this.invalidTimeLabel_Leave);
             // 
+            // taskExistsError
+            // 
+            this.taskExistsError.AutoSize = true;
+            this.taskExistsError.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.taskExistsError.ForeColor = System.Drawing.Color.Red;
+            this.taskExistsError.Location = new System.Drawing.Point(175, 12);
+            this.taskExistsError.Name = "taskExistsError";
+            this.taskExistsError.Size = new System.Drawing.Size(87, 12);
+            this.taskExistsError.TabIndex = 19;
+            this.taskExistsError.Text = "Task already exists!";
+            this.taskExistsError.Visible = false;
+            this.taskExistsError.Leave += new System.EventHandler(this.taskExistsError_Leave);
+            // 
             // Scheduler
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(296, 156);
+            this.ClientSize = new System.Drawing.Size(292, 156);
+            this.Controls.Add(this.taskExistsError);
             this.Controls.Add(this.invalidTimeLabel);
             this.Controls.Add(this.deleteErrorLabel);
             this.Controls.Add(this.successLabel);
@@ -291,5 +306,6 @@
         private System.Windows.Forms.Label successLabel;
         private System.Windows.Forms.Label deleteErrorLabel;
         private System.Windows.Forms.Label invalidTimeLabel;
+        private System.Windows.Forms.Label taskExistsError;
     }
 }
