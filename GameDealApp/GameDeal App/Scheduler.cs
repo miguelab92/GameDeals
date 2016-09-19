@@ -2,13 +2,11 @@
 /// Form to create a scheduled task
 
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Xml;
-using TaskScheduler;
 
 namespace GameDeal_App
 {
@@ -16,6 +14,7 @@ namespace GameDeal_App
     {
         //Task name
         public readonly static string TASK_NAME = "GameDealsChecker";
+        //Task location
         public readonly static string TASK_LOCATION = 
             GameDealApp.SETTINGS_FOLDER + GameDealApp.BAT_FILE;
 
@@ -48,31 +47,117 @@ namespace GameDeal_App
             timeInputBox.Mask = "00:00";
         }
 
+        /// <summary>
+        /// Set the existing schedule's time
+        /// </summary>
+        /// <param name="parseLine">Line with info of schedule</param>
+        private void SetExistingTime(string parseLine)
+        {
+            //Holds the time
+            StringBuilder timeLine = new StringBuilder();
+            //Holds the index we are working on
+            int indx;
+            //Holds if we are using AM or PM
+            bool isAM = false;
+
+            //If we fail simply don't show the time
+            try
+            {
+                //Finds the first colon ##(:)##
+                indx = parseLine.IndexOf(':') - 2;
+
+                //Checks if there is an hour at the tens place (#)#:##
+                if (!Char.IsDigit(parseLine[indx]))
+                {
+                    timeLine.Append('0');
+                    ++indx;
+                } else
+                {
+                    timeLine.Append(parseLine[indx++]);
+                }
+
+                //Gets the Hour at the ones place #(#):##
+                timeLine.Append(parseLine[indx++]);
+                //Gets the Minute at the tens place ##:(#)#
+                timeLine.Append(parseLine[++indx]);
+                //Gets the Minute at the ones place ##:#(#)
+                timeLine.Append(parseLine[indx]);
+
+                //Skips spaces, colons, and the seconds
+                indx += 5;
+
+                //If the first letter is A (for AM)
+                if (parseLine[indx] == 'A')
+                {
+                    //We are dealing with AM
+                    isAM = true;
+                }
+
+                //Select that we are working with time
+                timedButton.Checked = true;
+                //Set the time
+                timeInputBox.Text = timeLine.ToString();
+
+                //Set the AM or PM button
+                if (isAM)
+                {
+                    timeButtonAM.Checked = true;
+                } else
+                {
+                    timeButtonPM.Checked = true;
+                }
+            }
+            catch {
+                //Ignore errors
+            }
+        }
+
+        /// <summary>
+        /// Validate that the schedule exists
+        /// </summary>
+        /// <returns>Returns whether task exists or not</returns>
         private bool ValidateSchedule()
         {
+            //Holds the results of whether task exists
             bool taskExists = false;
 
+            //Holds commands to run
             List<string> commands = new List<string>();
+            //Holds outputs
             List<string> output = new List<string>();
+            //Holds the output with information of the existing line
             string taskLine = "";
+
+            //Command to run
             commands.Add("schtasks");
 
+            //Run command and get output
             output = RunCMD(commands);
 
+            //Foreach task in the output
             foreach(string scheduleTask in output)
             {
+                //If the name of our task exists
                 if ( scheduleTask.Contains(TASK_NAME) )
                 {
+                    //Task exists and we get the line
                     taskExists = true;
                     taskLine = scheduleTask;
                 }
             }
 
+            //If task exists
             if (taskExists)
             {
-                MessageBox.Show(taskLine);
+                //If the line is not N/A (startup on boot)
+                if (!taskLine.Contains("N/A"))
+                {
+                    //Get the time to display
+                    SetExistingTime(taskLine);
+                }
             }
 
+            //Return result
             return taskExists;
         }
         
@@ -134,13 +219,18 @@ namespace GameDeal_App
         /// <param name="e">Not Used</param>
         private void scheduleButton_Click(object sender, EventArgs e)
         {
+            //If a task doesn't already exist
             if (taskExistsLabel.BackColor != Color.Lime) {
+                
+                //Holds commands to run
                 List<string> commands = new List<string>();
+                //Used to build command
                 StringBuilder command = new StringBuilder();
 
+                //Append task and the /create argument
                 command.Append("schtasks /Create ");
 
-                //Else if the timer button is checked
+                //If the timed button is checked
                 if (timedButton.Checked)
                 {
                     command.Append("/SC DAILY ");
@@ -151,14 +241,17 @@ namespace GameDeal_App
                     command.Append("/SC ONSTART ");
                 }
 
+                //Append the task name and task location
                 command.Append("/TN ");
                 command.Append(TASK_NAME);
                 command.Append(" /TR \"");
                 command.Append(TASK_LOCATION);
                 command.Append('\"');
 
+                //If the timed button is checked
                 if (timedButton.Checked)
                 {
+                    //Append the argument to signal this
                     command.Append(" /ST ");
 
                     //Get scheduled time
@@ -170,13 +263,17 @@ namespace GameDeal_App
                         scheduleTime = scheduleTime.AddHours(12);
                     }
 
+                    //Append the time
                     command.Append(scheduleTime.ToString("HH:mm"));
                 }
 
+                //Add command
                 commands.Add(command.ToString());
                 try
                 {
+                    //Run command
                     RunCMD(commands);
+                    //Change the color to success
                     taskExistsLabel.BackColor = Color.Lime;
 
                     //Calls the status check of the GameDealApp main form
@@ -190,6 +287,7 @@ namespace GameDeal_App
                     MessageBox.Show("Error in creation: " + ex.Message);
                 }
             } else {
+                //Show error to user
                 taskExistsError.Visible = true;
                 taskExistsError.Focus();
             }
@@ -265,20 +363,27 @@ namespace GameDeal_App
         /// <param name="e">Not Used</param>
         private void deleteScheduleButton_Click(object sender, EventArgs e)
         {
+            //If there is a task to delete
             if (taskExistsLabel.BackColor == Color.Lime)
             {
+                //Holds commands
                 List<string> commands = new List<string>();
+                //Create command
                 StringBuilder command = new StringBuilder();
 
+                //Append the task name
                 command.Append("schtasks /Delete /TN ");
                 command.Append(TASK_NAME);
                 command.Append(" /F");
 
+                //Add to list
                 commands.Add(command.ToString());
 
                 try
                 {
+                    //Run command
                     RunCMD(commands);
+                    //Change the feedback color
                     taskExistsLabel.BackColor = Color.Red;
 
                     //Calls the status check of the GameDealApp main form
@@ -294,6 +399,7 @@ namespace GameDeal_App
                 }
             } else
             {
+                //Show error
                 deleteErrorLabel.Visible = true;
                 deleteErrorLabel.Focus();
             }
@@ -401,6 +507,11 @@ namespace GameDeal_App
             ValidTime();
         }
 
+        /// <summary>
+        /// Shows when trying to create a task while it exists
+        /// </summary>
+        /// <param name="sender">Not used</param>
+        /// <param name="e">Not used</param>
         private void taskExistsError_Leave(object sender, EventArgs e)
         {
             taskExistsError.Visible = false;

@@ -397,6 +397,21 @@ namespace GameDeal_App
         }
 
         /// <summary>
+        /// Read enter key presses for user fluidity
+        /// </summary>
+        /// <param name="sender">Not used</param>
+        /// <param name="e">Not used</param>
+        private void emailInput_KeyDown(object sender, KeyEventArgs e)
+        {
+            //If key was enter or return
+            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Return)
+            {
+                //Act as if add button was clicked
+                saveButton.PerformClick();
+            }
+        }
+
+        /// <summary>
         /// Prevent whitespaces
         /// </summary>
         /// <param name="sender">Not used</param>

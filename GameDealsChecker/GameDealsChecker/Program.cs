@@ -31,6 +31,7 @@ namespace GameDealsChecker
             //Log file
             LogFile log = new LogFile(PROGRAM_NAME);
 
+            //If we have arguments
             if (GetConfigSettings(ref log) && args.Length > 0)
             {
                 //Creates string that will hold the HTML file
@@ -64,6 +65,7 @@ namespace GameDealsChecker
             }
             else
             {
+                //Check the argument count
                 if (args.Count() == 0)
                 {
                     log.Log("No arguments were passed at time of call", true);
@@ -77,6 +79,10 @@ namespace GameDealsChecker
             }
         }
 
+        /// <summary>
+        /// Gets the webpage HTML
+        /// </summary>
+        /// <returns>Webpage HTML</returns>
         private static string GetWebPage()
         {
             //Creates string that will hold the HTML file

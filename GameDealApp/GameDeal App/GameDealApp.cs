@@ -6,6 +6,7 @@
 using System;
 using System.Drawing;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using TaskScheduler;
@@ -496,7 +497,9 @@ namespace GameDeal_App
             StringBuilder tempString = new StringBuilder();
 
             tempString.Append("@Author: Miguel Bermudez\n");
-            tempString.Append("@Version: v1.0\n");
+            tempString.Append("@Version: ");
+            tempString.Append(Assembly.GetExecutingAssembly().GetName().Version);
+            tempString.Append("\n");
             tempString.Append("\n");
             tempString.Append("Thank you so much for using this app! ");
             tempString.Append("Your support is greatly appreciated!\n");

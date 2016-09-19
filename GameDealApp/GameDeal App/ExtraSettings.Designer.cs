@@ -50,7 +50,7 @@
             this.emailLabel.Size = new System.Drawing.Size(35, 13);
             this.emailLabel.TabIndex = 0;
             this.emailLabel.Text = "Email:";
-            this.toolTip.SetToolTip(this.emailLabel, "Only Gmail accounts currently functioning. Sorry for any inconveniences!");
+            this.toolTip.SetToolTip(this.emailLabel, "This email with get the message when a game is found on sale");
             // 
             // copyButton
             // 
@@ -85,6 +85,7 @@
             this.emailInput.TabIndex = 8;
             this.toolTip.SetToolTip(this.emailInput, "Only Gmail accounts currently functioning. Sorry for any inconveniences!");
             this.emailInput.Enter += new System.EventHandler(this.emailInput_Enter);
+            this.emailInput.KeyDown += new System.Windows.Forms.KeyEventHandler(this.emailInput_KeyDown);
             this.emailInput.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.emailInput_KeyPress);
             this.emailInput.Leave += new System.EventHandler(this.emailInput_Leave);
             // 
