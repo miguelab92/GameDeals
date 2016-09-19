@@ -92,6 +92,7 @@
             // inputBox
             // 
             this.inputBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.inputBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.inputBox.Location = new System.Drawing.Point(12, 178);
             this.inputBox.Name = "inputBox";
             this.inputBox.Size = new System.Drawing.Size(119, 20);

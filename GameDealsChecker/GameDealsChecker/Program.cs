@@ -1,10 +1,9 @@
-﻿using Logger;
-/// @author: Miguel Bermudez
-/// @ver: 2016-07-18
+﻿/// @author: Miguel Bermudez
 /// @name: GameDealChecker
 /// @desc: Check /r/GameDeals for the games passed to this program as
 /// arguments. If game is found email the user.
 
+using Logger;
 using System;
 using System.Configuration;
 using System.Linq;
