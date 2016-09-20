@@ -9,7 +9,7 @@ using System.Text;
 using System.Windows.Forms;
 
 namespace GameDeal_App
-{
+{                          
     public partial class Scheduler : Form
     {
         //Task name
@@ -161,7 +161,7 @@ namespace GameDeal_App
             return taskExists;
         }
         
-        private List<string> RunCMD(List<string> commands)
+        private List<string> RunCMD(List<string> commands, bool runAsAdmin = false)
         {
             //Output lines and errors
             List<string> outputLines = new List<string>();
@@ -178,6 +178,11 @@ namespace GameDeal_App
             cmd.StartInfo.RedirectStandardOutput = true;
             cmd.StartInfo.RedirectStandardError = true;
             cmd.StartInfo.UseShellExecute = false;
+
+            if (runAsAdmin)
+            {
+                cmd.StartInfo.Verb = "runas";
+            }
 
             //Start process
             cmd.Start();
@@ -272,7 +277,7 @@ namespace GameDeal_App
                 try
                 {
                     //Run command
-                    RunCMD(commands);
+                    RunCMD(commands, true);
                     //Change the color to success
                     taskExistsLabel.BackColor = Color.Lime;
 
@@ -382,7 +387,7 @@ namespace GameDeal_App
                 try
                 {
                     //Run command
-                    RunCMD(commands);
+                    RunCMD(commands, true);
                     //Change the feedback color
                     taskExistsLabel.BackColor = Color.Red;
 
