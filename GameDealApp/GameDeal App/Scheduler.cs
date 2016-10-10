@@ -37,7 +37,7 @@ namespace GameDeal_App
             taskService.Connect();
             //Get the root folder of scheduled tasks
             ITaskFolder rootFolder = taskService.GetFolder("\\");
-            
+
             //Get all registered tasks from folder
             IRegisteredTaskCollection registeredTasks = rootFolder.GetTasks(0);
 
@@ -55,7 +55,7 @@ namespace GameDeal_App
                     foreach (ITrigger trigger in task.Definition.Triggers)
                     {
                         //If it was type Schedule on the hour
-                        if (trigger.Type == (_TASK_TRIGGER_TYPE2) 2 )
+                        if (trigger.Type == (_TASK_TRIGGER_TYPE2)2)
                         {
                             //Check the time button as true
                             timedButton.Checked = true;
@@ -73,19 +73,19 @@ namespace GameDeal_App
                             }
                         }
                         //Else if the type was on boot
-                        else if (trigger.Type == (_TASK_TRIGGER_TYPE2) 9 )
+                        else if (trigger.Type == (_TASK_TRIGGER_TYPE2)9)
                         {
                             startupButton.Checked = true;
                         }
                         //User has manually changed settings and its neither option
                         else
-                        {}
+                        { }
                     }
                 }
             }
 
             //If task doesn't exist
-            if (taskExistsLabel.BackColor == Color. Red)
+            if (taskExistsLabel.BackColor == Color.Red)
             {
                 //Create new task
                 newTask = taskService.NewTask(0);
@@ -174,44 +174,56 @@ namespace GameDeal_App
         /// <param name="e">Not Used</param>
         private void scheduleButton_Click(object sender, EventArgs e)
         {
-            //If the startup button is checked
-            if (startupButton.Checked ) 
+            //If a task doesn't already exist 
+            if (taskExistsLabel.BackColor != Color.Lime)
             {
-                CreateSchedule(9, DateTime.Now);
-            }
-            //Else if the timer button is checked
-            else if (timedButton.Checked)
-            {
-                //Check that time is valid
-                if (ValidTime())
+                //If the startup button is checked
+                if (startupButton.Checked)
                 {
-                    try
+                    CreateSchedule(9, DateTime.Now);
+                }
+                //Else if the timer button is checked
+                else if (timedButton.Checked)
+                {
+                    //Check that time is valid
+                    if (ValidTime())
                     {
-                        //Get scheduled time
-                        DateTime scheduleTime = DateTime.Parse(timeInputBox.Text);
-
-                        //Add 12 hours if PM is checked
-                        if (timeButtonPM.Checked)
+                        try
                         {
-                            scheduleTime.AddHours(12);
-                        }
+                            //Get scheduled time
+                            DateTime scheduleTime = 
+                                DateTime.Parse(timeInputBox.Text);
 
-                        //Call create scheudle
-                        CreateSchedule(2, scheduleTime);
+                            //Add 12 hours if PM is checked
+                            if (timeButtonPM.Checked)
+                            {
+                                scheduleTime.AddHours(12);
+                            }
+
+                            //Call create scheudle
+                            CreateSchedule(2, scheduleTime);
+                        }
+                        catch (Exception ex)
+                        {
+                            //Show error (likely parse)
+                            MessageBox.Show(ex.Message);
+                        }
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        //Show error (likely parse)
-                        MessageBox.Show(ex.Message);
                     }
                 }
                 else
                 {
+                    //Shouldn't get here!
+                    MessageBox.Show("Please select a scheduling method");
                 }
-            } else 
+            }
+            else
             {
-                //Shouldn't get here!
-                MessageBox.Show("Please select a scheduling method");
+                //Show error to user 
+                taskExistsError.Visible = true;
+                taskExistsError.Focus();
             }
         }
 
@@ -351,7 +363,7 @@ namespace GameDeal_App
                 scheduleWarningLabel.Visible = true;
 
                 //Default to AM if nothing else was checked
-                if ( timeButtonAM.Checked == false && timeButtonPM.Checked == false )
+                if (timeButtonAM.Checked == false && timeButtonPM.Checked == false)
                 {
                     timeButtonAM.Checked = true;
                 }
@@ -418,6 +430,17 @@ namespace GameDeal_App
         {
             //Validate the time
             ValidTime();
+        }
+
+
+        /// <summary> 
+        /// Shows when trying to create a task while it exists 
+        /// </summary> 
+        /// <param name="sender">Not used</param> 
+        /// <param name="e">Not used</param> 
+        private void taskExistsError_Leave(object sender, EventArgs e)
+        {
+            taskExistsError.Visible = false;
         }
     }
 }
