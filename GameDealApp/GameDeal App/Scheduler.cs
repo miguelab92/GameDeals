@@ -61,11 +61,14 @@ namespace GameDeal_App
                             timedButton.Checked = true;
                             try
                             {
-                                timeInputBox.Text = DateTime.Parse(trigger.StartBoundary).ToString();
+                                timeInputBox.Text = DateTime.Parse(trigger.StartBoundary).ToString("hh:mm");
+                                if (timeInputBox.Text == "12:00")
+                                {
+                                    timeInputBox.Text = "00:00";
+                                }
                             }
                             catch (Exception ex)
                             {
-                                //***CHANGE THIS: will get annoying if it doesn't work***
                                 MessageBox.Show(ex.Message);
                             }
                         }
@@ -111,9 +114,6 @@ namespace GameDeal_App
             ITaskService taskService = new TaskScheduler.TaskScheduler();
             taskService.Connect();
             ITaskFolder rootFolder = taskService.GetFolder(@"\");
-
-            /*******Use this for testing! **********/
-            MessageBox.Show(taskService.ConnectedUser);
 
             /* Create or update task */
 
