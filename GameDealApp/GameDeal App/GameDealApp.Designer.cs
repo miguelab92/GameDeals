@@ -36,14 +36,11 @@
             this.inputBox = new System.Windows.Forms.TextBox();
             this.settingsButton = new System.Windows.Forms.Button();
             this.scheduleButton = new System.Windows.Forms.Button();
-            this.deleteErrorLabel = new System.Windows.Forms.Label();
-            this.successLabel = new System.Windows.Forms.Label();
-            this.noItemLabel = new System.Windows.Forms.Label();
             this.emailLabel = new System.Windows.Forms.Label();
             this.scheduleLabel = new System.Windows.Forms.Label();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.moreButton = new System.Windows.Forms.Button();
-            this.gameInListError = new System.Windows.Forms.Label();
+            this.userFeedback = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // listBoxLabel
@@ -63,8 +60,10 @@
             this.gamesList.FormattingEnabled = true;
             this.gamesList.Location = new System.Drawing.Point(12, 25);
             this.gamesList.Name = "gamesList";
+            this.gamesList.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.gamesList.Size = new System.Drawing.Size(228, 147);
             this.gamesList.TabIndex = 5;
+            this.gamesList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.gamesList_KeyDown);
             // 
             // addButton
             // 
@@ -87,11 +86,11 @@
             this.remove.Text = "Del";
             this.remove.UseVisualStyleBackColor = true;
             this.remove.Click += new System.EventHandler(this.remove_Click);
-            this.remove.Leave += new System.EventHandler(this.remove_Leave);
             // 
             // inputBox
             // 
             this.inputBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.inputBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.inputBox.Location = new System.Drawing.Point(12, 178);
             this.inputBox.Name = "inputBox";
             this.inputBox.Size = new System.Drawing.Size(119, 20);
@@ -123,48 +122,6 @@
             this.toolTip.SetToolTip(this.scheduleButton, "Set up schedule for program to run");
             this.scheduleButton.UseVisualStyleBackColor = true;
             this.scheduleButton.Click += new System.EventHandler(this.scheduleButton_Click);
-            // 
-            // deleteErrorLabel
-            // 
-            this.deleteErrorLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.deleteErrorLabel.AutoSize = true;
-            this.deleteErrorLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.deleteErrorLabel.ForeColor = System.Drawing.Color.Red;
-            this.deleteErrorLabel.Location = new System.Drawing.Point(166, 12);
-            this.deleteErrorLabel.Name = "deleteErrorLabel";
-            this.deleteErrorLabel.Size = new System.Drawing.Size(74, 12);
-            this.deleteErrorLabel.TabIndex = 6;
-            this.deleteErrorLabel.Text = "No item selected";
-            this.deleteErrorLabel.Visible = false;
-            this.deleteErrorLabel.Leave += new System.EventHandler(this.deleteErrorLabel_Leave);
-            // 
-            // successLabel
-            // 
-            this.successLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.successLabel.AutoSize = true;
-            this.successLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.successLabel.ForeColor = System.Drawing.Color.Green;
-            this.successLabel.Location = new System.Drawing.Point(147, 12);
-            this.successLabel.Name = "successLabel";
-            this.successLabel.Size = new System.Drawing.Size(93, 12);
-            this.successLabel.TabIndex = 7;
-            this.successLabel.Text = "Successfully updated";
-            this.successLabel.Visible = false;
-            this.successLabel.VisibleChanged += new System.EventHandler(this.successLabel_VisibleChanged);
-            // 
-            // noItemLabel
-            // 
-            this.noItemLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.noItemLabel.AutoSize = true;
-            this.noItemLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.noItemLabel.ForeColor = System.Drawing.Color.Red;
-            this.noItemLabel.Location = new System.Drawing.Point(149, 12);
-            this.noItemLabel.Name = "noItemLabel";
-            this.noItemLabel.Size = new System.Drawing.Size(91, 12);
-            this.noItemLabel.TabIndex = 8;
-            this.noItemLabel.Text = "No games to remove";
-            this.noItemLabel.Visible = false;
-            this.noItemLabel.Leave += new System.EventHandler(this.noItemLabel_Leave);
             // 
             // emailLabel
             // 
@@ -204,32 +161,29 @@
             this.moreButton.Visible = false;
             this.moreButton.Click += new System.EventHandler(this.moreButton_Click);
             // 
-            // gameInListError
+            // userFeedback
             // 
-            this.gameInListError.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.gameInListError.AutoSize = true;
-            this.gameInListError.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.gameInListError.ForeColor = System.Drawing.Color.Red;
-            this.gameInListError.Location = new System.Drawing.Point(146, 12);
-            this.gameInListError.Name = "gameInListError";
-            this.gameInListError.Size = new System.Drawing.Size(94, 12);
-            this.gameInListError.TabIndex = 12;
-            this.gameInListError.Text = "Game is already in list";
-            this.gameInListError.Visible = false;
-            this.gameInListError.VisibleChanged += new System.EventHandler(this.gameInListError_VisibleChanged);
+            this.userFeedback.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.userFeedback.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.userFeedback.ForeColor = System.Drawing.Color.Red;
+            this.userFeedback.Location = new System.Drawing.Point(137, 10);
+            this.userFeedback.Name = "userFeedback";
+            this.userFeedback.Size = new System.Drawing.Size(103, 12);
+            this.userFeedback.TabIndex = 12;
+            this.userFeedback.Text = "[]";
+            this.userFeedback.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.userFeedback.Visible = false;
+            this.userFeedback.Leave += new System.EventHandler(this.userFeedback_Leave);
             // 
             // GameDealApp
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(252, 247);
-            this.Controls.Add(this.gameInListError);
+            this.Controls.Add(this.userFeedback);
             this.Controls.Add(this.moreButton);
             this.Controls.Add(this.scheduleLabel);
             this.Controls.Add(this.emailLabel);
-            this.Controls.Add(this.noItemLabel);
-            this.Controls.Add(this.successLabel);
-            this.Controls.Add(this.deleteErrorLabel);
             this.Controls.Add(this.scheduleButton);
             this.Controls.Add(this.settingsButton);
             this.Controls.Add(this.inputBox);
@@ -255,14 +209,11 @@
         private System.Windows.Forms.TextBox inputBox;
         private System.Windows.Forms.Button settingsButton;
         private System.Windows.Forms.Button scheduleButton;
-        private System.Windows.Forms.Label deleteErrorLabel;
-        private System.Windows.Forms.Label successLabel;
-        private System.Windows.Forms.Label noItemLabel;
         private System.Windows.Forms.Label emailLabel;
         private System.Windows.Forms.Label scheduleLabel;
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.Button moreButton;
-        private System.Windows.Forms.Label gameInListError;
+        private System.Windows.Forms.Label userFeedback;
     }
 }
 

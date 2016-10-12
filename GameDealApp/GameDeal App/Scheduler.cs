@@ -2,21 +2,20 @@
 /// Form to create a scheduled task
 
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using System.Xml;
+using TaskScheduler;
 
 namespace GameDeal_App
 {
     public partial class Scheduler : Form
     {
+        //Holds task we are working on
+        ITaskDefinition newTask;
         //Task name
         public readonly static string TASK_NAME = "GameDealsChecker";
-        //Task location
-        public readonly static string TASK_LOCATION = 
-            GameDealApp.SETTINGS_FOLDER + GameDealApp.BAT_FILE;
 
         /// <summary>
         /// Constructor
@@ -33,14 +32,63 @@ namespace GameDeal_App
         /// <param name="e">Not Used</param>
         private void Scheduler_Load(object sender, EventArgs e)
         {
-            if (ValidateSchedule())
+            //Create a new interface for the task scheduler
+            ITaskService taskService = new TaskScheduler.TaskScheduler();
+            taskService.Connect();
+            //Get the root folder of scheduled tasks
+            ITaskFolder rootFolder = taskService.GetFolder("\\");
+
+            //Get all registered tasks from folder
+            IRegisteredTaskCollection registeredTasks = rootFolder.GetTasks(0);
+
+            //For each task inside list of tasks
+            foreach (IRegisteredTask task in registeredTasks)
             {
-                taskExistsLabel.BackColor = Color.Lime;
+                //If a task matches with this program
+                if (task.Name == TASK_NAME)
+                {
+                    //Use existing task as base
+                    newTask = task.Definition;
+                    taskExistsLabel.BackColor = Color.Lime;
+
+                    //Check the trigger(s) for the type and start time/delay
+                    foreach (ITrigger trigger in task.Definition.Triggers)
+                    {
+                        //If it was type Schedule on the hour
+                        if (trigger.Type == (_TASK_TRIGGER_TYPE2)2)
+                        {
+                            //Check the time button as true
+                            timedButton.Checked = true;
+                            try
+                            {
+                                timeInputBox.Text = DateTime.Parse(trigger.StartBoundary).ToString("hh:mm");
+                                if (timeInputBox.Text == "12:00")
+                                {
+                                    timeInputBox.Text = "00:00";
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show(ex.Message);
+                            }
+                        }
+                        //Else if the type was on boot
+                        else if (trigger.Type == (_TASK_TRIGGER_TYPE2)9)
+                        {
+                            startupButton.Checked = true;
+                        }
+                        //User has manually changed settings and its neither option
+                        else
+                        { }
+                    }
+                }
             }
+
             //If task doesn't exist
-            else 
+            if (taskExistsLabel.BackColor == Color.Red)
             {
-                taskExistsLabel.BackColor = Color.Red;
+                //Create new task
+                newTask = taskService.NewTask(0);
             }
 
             //Sets the mask for the input box
@@ -48,168 +96,75 @@ namespace GameDeal_App
         }
 
         /// <summary>
-        /// Set the existing schedule's time
+        /// Create or update the task
         /// </summary>
-        /// <param name="parseLine">Line with info of schedule</param>
-        private void SetExistingTime(string parseLine)
+        /// <param name="type">Type of task (9 or 2)</param>
+        /// <param name="startTime">Time to use as start time</param>
+        private void CreateSchedule(int type, DateTime startTime)
         {
-            //Holds the time
-            StringBuilder timeLine = new StringBuilder();
-            //Holds the index we are working on
-            int indx;
-            //Holds if we are using AM or PM
-            bool isAM = false;
+            //Definitions
+            string timeFormat = "yyyy-MM-ddThh:mm:ss";
+            string idleTime = XmlConvert.ToString(TimeSpan.FromMinutes(1));
 
-            //If we fail simply don't show the time
-            try
+            ITriggerCollection triggers;
+            ITrigger trigger;
+            IActionCollection actions;
+            IAction action;
+            IExecAction execAction;
+            ITaskService taskService = new TaskScheduler.TaskScheduler();
+            taskService.Connect();
+            ITaskFolder rootFolder = taskService.GetFolder(@"\");
+
+            /* Create or update task */
+
+            //Task settings
+            newTask.RegistrationInfo.Description = "Runs GameDealsChecker program";
+            newTask.RegistrationInfo.Author = Environment.UserName;
+            newTask.Settings.Enabled = true;
+            newTask.Settings.Hidden = false;
+            newTask.Settings.Compatibility = _TASK_COMPATIBILITY.TASK_COMPATIBILITY_V2;
+            newTask.Settings.ExecutionTimeLimit = idleTime;
+            newTask.Settings.RunOnlyIfIdle = false;
+
+            // Triggers
+            triggers = newTask.Triggers;
+
+            //MAIN DECIDER ON WHEN TRIGGER GOES OFF (Check enum definition)
+            trigger = triggers.Create((_TASK_TRIGGER_TYPE2)type);
+
+            //Enable trigger to run and set start time
+            trigger.Enabled = true;
+            trigger.StartBoundary = startTime.ToString(timeFormat);
+
+            // Actions
+            actions = newTask.Actions;
+            // Run exec
+            action = actions.Create((_TASK_ACTION_TYPE)0);
+            execAction = action as IExecAction;
+
+            //Run path + GameDealsChecker.bat from folder path
+            execAction.Path = GameDealApp.SETTINGS_FOLDER + GameDealApp.BAT_FILE;
+            execAction.WorkingDirectory = GameDealApp.SETTINGS_FOLDER;
+
+            try {
+                //Same task name to update old one. 6 means update or create!
+                rootFolder.RegisterTaskDefinition(TASK_NAME, newTask, 6,
+                    null, null, _TASK_LOGON_TYPE.TASK_LOGON_NONE);
+
+                //Task now exists
+                taskExistsLabel.BackColor = Color.Lime;
+
+                //Calls the status check of the GameDealApp main form
+                (Owner as GameDealApp).CheckStatus();
+
+                //User feedback
+                successLabel.Visible = true;
+                successLabel.Focus();
+
+            } catch (Exception ex)
             {
-                //Finds the first colon ##(:)##
-                indx = parseLine.IndexOf(':') - 2;
-
-                //Checks if there is an hour at the tens place (#)#:##
-                if (!Char.IsDigit(parseLine[indx]))
-                {
-                    timeLine.Append('0');
-                    ++indx;
-                } else
-                {
-                    timeLine.Append(parseLine[indx++]);
-                }
-
-                //Gets the Hour at the ones place #(#):##
-                timeLine.Append(parseLine[indx++]);
-                //Gets the Minute at the tens place ##:(#)#
-                timeLine.Append(parseLine[++indx]);
-                //Gets the Minute at the ones place ##:#(#)
-                timeLine.Append(parseLine[indx]);
-
-                //Skips spaces, colons, and the seconds
-                indx += 5;
-
-                //If the first letter is A (for AM)
-                if (parseLine[indx] == 'A')
-                {
-                    //We are dealing with AM
-                    isAM = true;
-                }
-
-                //Select that we are working with time
-                timedButton.Checked = true;
-                //Set the time
-                timeInputBox.Text = timeLine.ToString();
-
-                //Set the AM or PM button
-                if (isAM)
-                {
-                    timeButtonAM.Checked = true;
-                } else
-                {
-                    timeButtonPM.Checked = true;
-                }
+                MessageBox.Show(ex.Message);
             }
-            catch {
-                //Ignore errors
-            }
-        }
-
-        /// <summary>
-        /// Validate that the schedule exists
-        /// </summary>
-        /// <returns>Returns whether task exists or not</returns>
-        private bool ValidateSchedule()
-        {
-            //Holds the results of whether task exists
-            bool taskExists = false;
-
-            //Holds commands to run
-            List<string> commands = new List<string>();
-            //Holds outputs
-            List<string> output = new List<string>();
-            //Holds the output with information of the existing line
-            string taskLine = "";
-
-            //Command to run
-            commands.Add("schtasks");
-
-            //Run command and get output
-            output = RunCMD(commands);
-
-            //Foreach task in the output
-            foreach(string scheduleTask in output)
-            {
-                //If the name of our task exists
-                if ( scheduleTask.Contains(TASK_NAME) )
-                {
-                    //Task exists and we get the line
-                    taskExists = true;
-                    taskLine = scheduleTask;
-                }
-            }
-
-            //If task exists
-            if (taskExists)
-            {
-                //If the line is not N/A (startup on boot)
-                if (!taskLine.Contains("N/A"))
-                {
-                    //Get the time to display
-                    SetExistingTime(taskLine);
-                }
-            }
-
-            //Return result
-            return taskExists;
-        }
-        
-        private List<string> RunCMD(List<string> commands)
-        {
-            //Output lines and errors
-            List<string> outputLines = new List<string>();
-            List<string> errorLines = new List<string>();
-
-            //Create new process using cmd.exe
-            Process cmd = new Process();
-            cmd.StartInfo.FileName = "cmd.exe";
-
-            //Set start information
-            cmd.StartInfo.WorkingDirectory = GameDealApp.SETTINGS_FOLDER; ;
-            cmd.StartInfo.CreateNoWindow = true;
-            cmd.StartInfo.RedirectStandardInput = true;
-            cmd.StartInfo.RedirectStandardOutput = true;
-            cmd.StartInfo.RedirectStandardError = true;
-            cmd.StartInfo.UseShellExecute = false;
-
-            //Start process
-            cmd.Start();
-
-            //For each command given to this method
-            foreach (string command in commands)
-            {
-                cmd.StandardInput.WriteLine(command);
-            }
-
-            //Exit at end
-            cmd.StandardInput.WriteLine("exit");
-
-            //Flush anything left
-            cmd.StandardInput.Flush();
-
-            //Read all error and output lines
-            while (!cmd.StandardOutput.EndOfStream)
-            {
-                outputLines.Add(cmd.StandardOutput.ReadLine());
-            }
-
-            //Close all streams
-            cmd.StandardInput.Close();
-            cmd.StandardOutput.Close();
-            cmd.StandardError.Close();
-
-            //wait for exit, and close all streams
-            cmd.WaitForExit();
-
-            //Return the output
-            return outputLines;
         }
 
         /// <summary>
@@ -219,75 +174,54 @@ namespace GameDeal_App
         /// <param name="e">Not Used</param>
         private void scheduleButton_Click(object sender, EventArgs e)
         {
-            //If a task doesn't already exist
-            if (taskExistsLabel.BackColor != Color.Lime) {
-                
-                //Holds commands to run
-                List<string> commands = new List<string>();
-                //Used to build command
-                StringBuilder command = new StringBuilder();
-
-                //Append task and the /create argument
-                command.Append("schtasks /Create ");
-
-                //If the timed button is checked
-                if (timedButton.Checked)
-                {
-                    command.Append("/SC DAILY ");
-                }
+            //If a task doesn't already exist 
+            if (taskExistsLabel.BackColor != Color.Lime)
+            {
                 //If the startup button is checked
+                if (startupButton.Checked)
+                {
+                    CreateSchedule(9, DateTime.Now);
+                }
+                //Else if the timer button is checked
+                else if (timedButton.Checked)
+                {
+                    //Check that time is valid
+                    if (ValidTime())
+                    {
+                        try
+                        {
+                            //Get scheduled time
+                            DateTime scheduleTime = 
+                                DateTime.Parse(timeInputBox.Text);
+
+                            //Add 12 hours if PM is checked
+                            if (timeButtonPM.Checked)
+                            {
+                                scheduleTime.AddHours(12);
+                            }
+
+                            //Call create scheudle
+                            CreateSchedule(2, scheduleTime);
+                        }
+                        catch (Exception ex)
+                        {
+                            //Show error (likely parse)
+                            MessageBox.Show(ex.Message);
+                        }
+                    }
+                    else
+                    {
+                    }
+                }
                 else
                 {
-                    command.Append("/SC ONSTART ");
+                    //Shouldn't get here!
+                    MessageBox.Show("Please select a scheduling method");
                 }
-
-                //Append the task name and task location
-                command.Append("/TN ");
-                command.Append(TASK_NAME);
-                command.Append(" /TR \"");
-                command.Append(TASK_LOCATION);
-                command.Append('\"');
-
-                //If the timed button is checked
-                if (timedButton.Checked)
-                {
-                    //Append the argument to signal this
-                    command.Append(" /ST ");
-
-                    //Get scheduled time
-                    DateTime scheduleTime = DateTime.Parse(timeInputBox.Text);
-
-                    //Add 12 hours if PM is checked
-                    if (timeButtonPM.Checked)
-                    {
-                        scheduleTime = scheduleTime.AddHours(12);
-                    }
-
-                    //Append the time
-                    command.Append(scheduleTime.ToString("HH:mm"));
-                }
-
-                //Add command
-                commands.Add(command.ToString());
-                try
-                {
-                    //Run command
-                    RunCMD(commands);
-                    //Change the color to success
-                    taskExistsLabel.BackColor = Color.Lime;
-
-                    //Calls the status check of the GameDealApp main form
-                    (Owner as GameDealApp).CheckStatus();
-
-                    //User feedback
-                    successLabel.Visible = true;
-                    successLabel.Focus();
-                } catch (Exception ex)
-                {
-                    MessageBox.Show("Error in creation: " + ex.Message);
-                }
-            } else {
-                //Show error to user
+            }
+            else
+            {
+                //Show error to user 
                 taskExistsError.Visible = true;
                 taskExistsError.Focus();
             }
@@ -363,43 +297,34 @@ namespace GameDeal_App
         /// <param name="e">Not Used</param>
         private void deleteScheduleButton_Click(object sender, EventArgs e)
         {
-            //If there is a task to delete
+            //First be sure task exists
             if (taskExistsLabel.BackColor == Color.Lime)
             {
-                //Holds commands
-                List<string> commands = new List<string>();
-                //Create command
-                StringBuilder command = new StringBuilder();
+                ITaskService taskService = new TaskScheduler.TaskScheduler();
+                taskService.Connect();
 
-                //Append the task name
-                command.Append("schtasks /Delete /TN ");
-                command.Append(TASK_NAME);
-                command.Append(" /F");
-
-                //Add to list
-                commands.Add(command.ToString());
-
+                //Get root folder
+                ITaskFolder taskFolder = taskService.GetFolder("\\");
                 try
                 {
-                    //Run command
-                    RunCMD(commands);
-                    //Change the feedback color
-                    taskExistsLabel.BackColor = Color.Red;
+                    //Delete task
+                    taskFolder.DeleteTask(TASK_NAME, 0);
 
                     //Calls the status check of the GameDealApp main form
                     (Owner as GameDealApp).CheckStatus();
 
-                    //User feedback
+                    //Update labels
+                    taskExistsLabel.BackColor = Color.Red;
                     successLabel.Visible = true;
                     successLabel.Focus();
-
-                } catch (Exception ex)
+                }
+                catch (Exception ex)
                 {
-                    MessageBox.Show("Error in deletion: " + ex.Message);
+                    MessageBox.Show(ex.Message);
                 }
             } else
             {
-                //Show error
+                //Show error label and give it focus
                 deleteErrorLabel.Visible = true;
                 deleteErrorLabel.Focus();
             }
@@ -438,7 +363,7 @@ namespace GameDeal_App
                 scheduleWarningLabel.Visible = true;
 
                 //Default to AM if nothing else was checked
-                if ( timeButtonAM.Checked == false && timeButtonPM.Checked == false )
+                if (timeButtonAM.Checked == false && timeButtonPM.Checked == false)
                 {
                     timeButtonAM.Checked = true;
                 }
@@ -507,11 +432,12 @@ namespace GameDeal_App
             ValidTime();
         }
 
-        /// <summary>
-        /// Shows when trying to create a task while it exists
-        /// </summary>
-        /// <param name="sender">Not used</param>
-        /// <param name="e">Not used</param>
+
+        /// <summary> 
+        /// Shows when trying to create a task while it exists 
+        /// </summary> 
+        /// <param name="sender">Not used</param> 
+        /// <param name="e">Not used</param> 
         private void taskExistsError_Leave(object sender, EventArgs e)
         {
             taskExistsError.Visible = false;
