@@ -4,6 +4,7 @@
 /// app much easier to use
 
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
@@ -308,15 +309,14 @@ namespace GameDeal_App
                     //If save was successful
                     if (SaveList())
                     {
-                        successLabel.Visible = true;
+                        SetUserFeedback("Success", false);
                         inputBox.Text = "";
                         inputBox.Focus();
                     }
                 } else
                 {
-                    //Game is already in list
-                    gameInListError.Visible = true;
                     inputBox.Text = "";
+                    SetUserFeedback("Game already in list");
                 }
             }
         }
@@ -336,15 +336,37 @@ namespace GameDeal_App
             {
                 //Save the current index
                 curLocation = gamesList.SelectedIndex;
-                //Delete game at that index
-                gamesList.Items.RemoveAt(gamesList.SelectedIndex);
 
-                //Point to new index
-                GetNewIndex(curLocation);
+                //Holds a list of items to delete
+                List<string> listToDelete = new List<string>();
+
+                //Check all the items selected
+                for (int i = 0; i < gamesList.Items.Count; ++i)
+                {
+                    //If the current item has been selected
+                    if (gamesList.GetSelected(i) == true)
+                    {
+                        //Add it to the list to delete
+                        listToDelete.Add((string)gamesList.Items[i]);
+                    }
+                }
+
+                //For each item in list to delete
+                foreach (string item in listToDelete)
+                {
+                    //Remove from local view
+                    gamesList.Items.Remove(item);
+                }
+
+                if (listToDelete.Count == 1)
+                {
+                    //Point to new index
+                    GetNewIndex(curLocation);
+                }
 
                 //Save updated list
                 SaveList();
-                successLabel.Visible = true;
+                SetUserFeedback("Success", false);
             }
             else
             {
@@ -354,24 +376,22 @@ namespace GameDeal_App
                     curLocation = gamesList.Items.IndexOf(inputBox.Text.Trim());
                     //Remove game from list and clear the input box
                     gamesList.Items.RemoveAt(curLocation);
+                    inputBox.Text = "";
 
                     //Point to new index
                     GetNewIndex(curLocation);
 
                     //Save updated list
                     SaveList();
-                    successLabel.Visible = true;
+                    SetUserFeedback("Success", false);
                 } else {
                     //If there are games we tell user they must select
                     if (gamesList.Items.Count > 0)
                     {
-                        deleteErrorLabel.Visible = true;
-                        deleteErrorLabel.Focus();
+                        SetUserFeedback("Select a game to delete");
                     } else
                     {
-                        //Otherwise warn user that there is no games
-                        noItemLabel.Visible = true;
-                        noItemLabel.Focus();
+                        SetUserFeedback("No items in list");
                     }
                 }
             }
@@ -387,7 +407,7 @@ namespace GameDeal_App
             if (gamesList.Items.Count > 0)
             {
                 //If the selected index was not at 0
-                if (curLocation != 0)
+                if (curLocation > 0)
                 {
                     //Our new selected index is the old index minus one
                     gamesList.SelectedIndex = curLocation - 1;
@@ -395,7 +415,7 @@ namespace GameDeal_App
                 else
                 {
                     //Our index is now 0
-                    gamesList.SelectedIndex = curLocation;
+                    gamesList.SelectedIndex = 0;
                 }
             }
         }
@@ -422,10 +442,14 @@ namespace GameDeal_App
             //If it was enter or return
             if ( e.KeyCode == Keys.Enter || e.KeyCode == Keys.Return )
             {
+                //First reset the userFeedback label
+                userFeedback.Visible = false;
                 //Act as if add button was clicked
                 addButton.PerformClick();
             } else if ( e.KeyCode == Keys.Delete )
             {
+                //First reset the userFeedback label
+                userFeedback.Visible = false;
                 //Act as if delete button was clicked
                 remove.PerformClick();
                 gamesList.SelectedIndex = -1;
@@ -447,24 +471,13 @@ namespace GameDeal_App
         }
 
         /// <summary>
-        /// Hide the delete error label when user focuses on anything else
-        /// </summary>
-        /// <param name="sender">Not Used</param>
-        /// <param name="e">Not Used</param>
-        private void deleteErrorLabel_Leave(object sender, EventArgs e)
-        {
-            deleteErrorLabel.Visible = false;
-        }
-
-        /// <summary>
         /// Hide the possible labels when user focuses on anything
         /// </summary>
         /// <param name="sender">Not Used</param>
         /// <param name="e">Not Used</param>
         private void inputBox_Leave(object sender, EventArgs e)
         {
-            successLabel.Visible = false;
-            gameInListError.Visible = false;
+            userFeedback.Visible = false;
         }
 
         /// <summary>
@@ -474,17 +487,7 @@ namespace GameDeal_App
         /// <param name="e">Not Used</param>
         private void remove_Leave(object sender, EventArgs e)
         {
-            successLabel.Visible = false;
-        }
-
-        /// <summary>
-        /// Hide the error label when user focuses on anything else
-        /// </summary>
-        /// <param name="sender">Not Used</param>
-        /// <param name="e">Not Used</param>
-        private void noItemLabel_Leave(object sender, EventArgs e)
-        {
-            noItemLabel.Visible = false;
+            userFeedback.Visible = false;
         }
 
         /// <summary>
@@ -517,32 +520,6 @@ namespace GameDeal_App
         }
 
         /// <summary>
-        /// When this label is visible the success label is hidden
-        /// </summary>
-        /// <param name="sender">Not Used</param>
-        /// <param name="e">Not Used</param>
-        private void gameInListError_VisibleChanged(object sender, EventArgs e)
-        {
-            if (gameInListError.Visible == true)
-            {
-                successLabel.Visible = false;
-            }
-        }
-
-        /// <summary>
-        /// When this label is visible the in game list label is hidden
-        /// </summary>
-        /// <param name="sender">Not Used</param>
-        /// <param name="e">Not Used</param>
-        private void successLabel_VisibleChanged(object sender, EventArgs e)
-        {
-            if (successLabel.Visible == true)
-            {
-                gameInListError.Visible = false;
-            }
-        }
-
-        /// <summary>
         /// Unselect game list when click on inputBox
         /// </summary>
         /// <param name="sender">Not Used</param>
@@ -551,6 +528,40 @@ namespace GameDeal_App
         {
             //Unselect game list if focusing on inputBox
             gamesList.SelectedIndex = -1;
+        }
+
+        /// <summary>
+        /// Remove all the 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void gamesList_KeyDown(object sender, KeyEventArgs e)
+        {
+            //If the key pressed is delete
+            if (e.KeyCode == Keys.Delete)
+            {
+                remove.PerformClick();
+            }
+        }
+
+        private void SetUserFeedback ( string message, bool isError = true)
+        {
+            userFeedback.Visible = true;
+            userFeedback.Text = message;
+            if (isError)
+            {
+                userFeedback.ForeColor = Color.Red;
+                userFeedback.Focus();
+            }
+            else
+            {
+                userFeedback.ForeColor = Color.Green;
+            }
+        }
+
+        private void userFeedback_Leave(object sender, EventArgs e)
+        {
+            userFeedback.Visible = false;
         }
     }
 }
