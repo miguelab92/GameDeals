@@ -1,6 +1,6 @@
-﻿/// @author: Miguel Bermudez
-/// @name: GameDeal app
-/// @desc: Visual form to make the use of GameDealsSearch
+﻿/// Author: Miguel Bermudez
+/// Application: GameDeal app
+/// Brief: Visual form to make the use of GameDealsSearch
 /// app much easier to use
 
 using System;
@@ -144,7 +144,8 @@ namespace GameDeal_App
             }
 
             //Check if both are completed
-            if ( emailLabel.BackColor == Color.Green && scheduleLabel.BackColor == Color.Green )
+            if ( emailLabel.BackColor == Color.Green && 
+                scheduleLabel.BackColor == Color.Green )
             {
                 //Hide if completed
                 emailLabel.Visible = false;
@@ -273,24 +274,100 @@ namespace GameDeal_App
         }
 
         /// <summary>
-        /// Checks and adds item to list returning result
+        /// Sets the user feedback label to a message
         /// </summary>
-        /// <param name="game">Game to add</param>
-        /// <returns>Did we successfully add game</returns>
-        private bool AddToList ( string game )
+        /// <param name="message">Not Used</param>
+        /// <param name="isError">Not Used</param>
+        private void SetUserFeedback(string message, bool isError = true)
         {
-            //Holds results
-            bool validAdd = false;
-
-            //If the game is not already in the list
-            if (!gamesList.Items.Contains(game))
+            //Set the user feedback to message and visible
+            userFeedback.Visible = true;
+            userFeedback.Text = message;
+            
+            //If its an error
+            if (isError)
             {
-                //Add game in input box
-                gamesList.Items.Add(game);
-                validAdd = true;
+                //Take focus away and make message red
+                userFeedback.ForeColor = Color.Red;
             }
+            else
+            {
+                //Otherwise just show message
+                userFeedback.ForeColor = Color.Green;
+            }
+        }
 
-            return validAdd;
+        /// <summary>
+        /// If the user takes focus away from feedback we hope he read it and
+        /// can freely hide it
+        /// </summary>
+        /// <param name="message">Not Used</param>
+        /// <param name="isError">Not Used</param>
+        private void userFeedback_Leave(object sender, EventArgs e)
+        {
+            userFeedback.Visible = false;
+        }
+
+        /// <summary>
+        /// Remove all the 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void gamesList_KeyDown(object sender, KeyEventArgs e)
+        {
+            //If the key pressed is delete
+            if (e.KeyCode == Keys.Delete)
+            {
+                remove.PerformClick();
+            }
+        }
+
+        /// <summary>
+        /// Unselect game list when click on inputBox
+        /// </summary>
+        /// <param name="sender">Not Used</param>
+        /// <param name="e">Not Used</param>
+        private void inputBox_Enter(object sender, EventArgs e)
+        {
+            //Unselect game list if focusing on inputBox
+            gamesList.SelectedIndex = -1;
+        }
+
+        /// <summary>
+        /// Checks what key was pressed
+        /// </summary>
+        /// <param name="sender">Not Used</param>
+        /// <param name="e">Not Used</param>
+        private void inputBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            //If it was enter or return
+            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Return)
+            {
+                //First reset the userFeedback label
+                userFeedback.Visible = false;
+                //Act as if add button was clicked
+                addButton.PerformClick();
+            }
+            else if (e.KeyCode == Keys.Delete)
+            {
+                //First reset the userFeedback label
+                userFeedback.Visible = false;
+                //Act as if delete button was clicked
+                remove.PerformClick();
+                gamesList.SelectedIndex = -1;
+                inputBox.Text = "";
+                inputBox.Focus();
+            }
+        }
+
+        /// <summary>
+        /// Hide the possible labels when user focuses on anything
+        /// </summary>
+        /// <param name="sender">Not Used</param>
+        /// <param name="e">Not Used</param>
+        private void inputBox_Leave(object sender, EventArgs e)
+        {
+            userFeedback.Visible = false;
         }
 
         /// <summary>
@@ -309,7 +386,7 @@ namespace GameDeal_App
                     //If save was successful
                     if (SaveList())
                     {
-                        SetUserFeedback("Success", false);
+                        SetUserFeedback("Success!", false);
                         inputBox.Text = "";
                         inputBox.Focus();
                     }
@@ -319,6 +396,27 @@ namespace GameDeal_App
                     SetUserFeedback("Game already in list");
                 }
             }
+        }
+
+        /// <summary>
+        /// Checks and adds item to list returning result
+        /// </summary>
+        /// <param name="game">Game to add</param>
+        /// <returns>Did we successfully add game</returns>
+        private bool AddToList(string game)
+        {
+            //Holds results
+            bool validAdd = false;
+
+            //If the game is not already in the list
+            if (!gamesList.Items.Contains(game))
+            {
+                //Add game in input box
+                gamesList.Items.Add(game);
+                validAdd = true;
+            }
+
+            return validAdd;
         }
 
         /// <summary>
@@ -366,11 +464,12 @@ namespace GameDeal_App
 
                 //Save updated list
                 SaveList();
-                SetUserFeedback("Success", false);
+                SetUserFeedback("Success!", false);
             }
             else
             {
-                //If the list contains a game that is currently written in the textBox
+                //If the list contains a game that is currently 
+                //written in the textBox
                 if (gamesList.Items.Contains(inputBox.Text.Trim())) {
                     //Get index of game
                     curLocation = gamesList.Items.IndexOf(inputBox.Text.Trim());
@@ -383,14 +482,28 @@ namespace GameDeal_App
 
                     //Save updated list
                     SaveList();
-                    SetUserFeedback("Success", false);
-                } else {
+                    SetUserFeedback("Success!", false);
+                }
+                else
+                {
                     //If there are games we tell user they must select
                     if (gamesList.Items.Count > 0)
                     {
-                        SetUserFeedback("Select a game to delete");
-                    } else
+                        //If the input box was not empty
+                        if (inputBox.Text != "")
+                        {
+                            //Game was not found in list
+                            SetUserFeedback("Game is not in list");
+                        }
+                        else
+                        {
+                            //No item selected and nothing in inputbox
+                            SetUserFeedback("Select games to delete");
+                        }
+                    }
+                    else
                     {
+                        //Game list is empty
                         SetUserFeedback("No items in list");
                     }
                 }
@@ -433,32 +546,6 @@ namespace GameDeal_App
         }
 
         /// <summary>
-        /// Checks what key was pressed
-        /// </summary>
-        /// <param name="sender">Not Used</param>
-        /// <param name="e">Not Used</param>
-        private void inputBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            //If it was enter or return
-            if ( e.KeyCode == Keys.Enter || e.KeyCode == Keys.Return )
-            {
-                //First reset the userFeedback label
-                userFeedback.Visible = false;
-                //Act as if add button was clicked
-                addButton.PerformClick();
-            } else if ( e.KeyCode == Keys.Delete )
-            {
-                //First reset the userFeedback label
-                userFeedback.Visible = false;
-                //Act as if delete button was clicked
-                remove.PerformClick();
-                gamesList.SelectedIndex = -1;
-                inputBox.Text = "";
-                inputBox.Focus();
-            }
-        }
-
-        /// <summary>
         /// Calls scheduler
         /// </summary>
         /// <param name="sender">Not Used</param>
@@ -468,26 +555,6 @@ namespace GameDeal_App
             Scheduler scheduleCall = new Scheduler();
             scheduleCall.Owner = this;
             scheduleCall.ShowDialog();
-        }
-
-        /// <summary>
-        /// Hide the possible labels when user focuses on anything
-        /// </summary>
-        /// <param name="sender">Not Used</param>
-        /// <param name="e">Not Used</param>
-        private void inputBox_Leave(object sender, EventArgs e)
-        {
-            userFeedback.Visible = false;
-        }
-
-        /// <summary>
-        /// Hide the success label when user focuses on anything
-        /// </summary>
-        /// <param name="sender">Not Used</param>
-        /// <param name="e">Not Used</param>
-        private void remove_Leave(object sender, EventArgs e)
-        {
-            userFeedback.Visible = false;
         }
 
         /// <summary>
@@ -517,51 +584,6 @@ namespace GameDeal_App
             MessageBox.Show(tempString.ToString(), "Thank you!");
 
             moreButton.Visible = false;
-        }
-
-        /// <summary>
-        /// Unselect game list when click on inputBox
-        /// </summary>
-        /// <param name="sender">Not Used</param>
-        /// <param name="e">Not Used</param>
-        private void inputBox_Enter(object sender, EventArgs e)
-        {
-            //Unselect game list if focusing on inputBox
-            gamesList.SelectedIndex = -1;
-        }
-
-        /// <summary>
-        /// Remove all the 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void gamesList_KeyDown(object sender, KeyEventArgs e)
-        {
-            //If the key pressed is delete
-            if (e.KeyCode == Keys.Delete)
-            {
-                remove.PerformClick();
-            }
-        }
-
-        private void SetUserFeedback ( string message, bool isError = true)
-        {
-            userFeedback.Visible = true;
-            userFeedback.Text = message;
-            if (isError)
-            {
-                userFeedback.ForeColor = Color.Red;
-                userFeedback.Focus();
-            }
-            else
-            {
-                userFeedback.ForeColor = Color.Green;
-            }
-        }
-
-        private void userFeedback_Leave(object sender, EventArgs e)
-        {
-            userFeedback.Visible = false;
         }
     }
 }

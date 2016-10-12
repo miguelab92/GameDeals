@@ -56,7 +56,7 @@
             // 
             this.copyButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.copyButton.AutoSize = true;
-            this.copyButton.Location = new System.Drawing.Point(15, 47);
+            this.copyButton.Location = new System.Drawing.Point(15, 52);
             this.copyButton.Name = "copyButton";
             this.copyButton.Size = new System.Drawing.Size(156, 17);
             this.copyButton.TabIndex = 10;
@@ -67,7 +67,7 @@
             // saveButton
             // 
             this.saveButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.saveButton.Location = new System.Drawing.Point(42, 93);
+            this.saveButton.Location = new System.Drawing.Point(40, 87);
             this.saveButton.Name = "saveButton";
             this.saveButton.Size = new System.Drawing.Size(75, 23);
             this.saveButton.TabIndex = 13;
@@ -94,7 +94,7 @@
             this.separationLabel.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.separationLabel.AutoSize = true;
             this.separationLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.separationLabel.Location = new System.Drawing.Point(158, 67);
+            this.separationLabel.Location = new System.Drawing.Point(59, 40);
             this.separationLabel.Name = "separationLabel";
             this.separationLabel.Size = new System.Drawing.Size(100, 12);
             this.separationLabel.TabIndex = 11;
@@ -105,7 +105,7 @@
             // 
             this.copyInputText.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.copyInputText.Enabled = false;
-            this.copyInputText.Location = new System.Drawing.Point(61, 47);
+            this.copyInputText.Location = new System.Drawing.Point(61, 52);
             this.copyInputText.Name = "copyInputText";
             this.copyInputText.Size = new System.Drawing.Size(197, 20);
             this.copyInputText.TabIndex = 11;
@@ -120,7 +120,7 @@
             this.emailError.AutoSize = true;
             this.emailError.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.emailError.ForeColor = System.Drawing.Color.Red;
-            this.emailError.Location = new System.Drawing.Point(59, 32);
+            this.emailError.Location = new System.Drawing.Point(200, 32);
             this.emailError.Name = "emailError";
             this.emailError.Size = new System.Drawing.Size(58, 12);
             this.emailError.TabIndex = 15;
@@ -133,7 +133,7 @@
             this.ccError.AutoSize = true;
             this.ccError.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ccError.ForeColor = System.Drawing.Color.Red;
-            this.ccError.Location = new System.Drawing.Point(59, 67);
+            this.ccError.Location = new System.Drawing.Point(189, 72);
             this.ccError.Name = "ccError";
             this.ccError.Size = new System.Drawing.Size(69, 12);
             this.ccError.TabIndex = 16;
@@ -143,7 +143,7 @@
             // testButton
             // 
             this.testButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.testButton.Location = new System.Drawing.Point(153, 93);
+            this.testButton.Location = new System.Drawing.Point(151, 87);
             this.testButton.Name = "testButton";
             this.testButton.Size = new System.Drawing.Size(75, 23);
             this.testButton.TabIndex = 14;
@@ -156,7 +156,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(267, 132);
+            this.ClientSize = new System.Drawing.Size(267, 122);
             this.Controls.Add(this.ccError);
             this.Controls.Add(this.emailError);
             this.Controls.Add(this.testButton);
@@ -167,7 +167,6 @@
             this.Controls.Add(this.copyButton);
             this.Controls.Add(this.emailLabel);
             this.MaximumSize = new System.Drawing.Size(1080, 170);
-            this.MinimumSize = new System.Drawing.Size(279, 170);
             this.Name = "ExtraSettings";
             this.Text = "App settings";
             this.ResumeLayout(false);

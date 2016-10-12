@@ -86,7 +86,6 @@
             this.remove.Text = "Del";
             this.remove.UseVisualStyleBackColor = true;
             this.remove.Click += new System.EventHandler(this.remove_Click);
-            this.remove.Leave += new System.EventHandler(this.remove_Leave);
             // 
             // inputBox
             // 
@@ -167,9 +166,9 @@
             this.userFeedback.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.userFeedback.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.userFeedback.ForeColor = System.Drawing.Color.Red;
-            this.userFeedback.Location = new System.Drawing.Point(146, 10);
+            this.userFeedback.Location = new System.Drawing.Point(137, 10);
             this.userFeedback.Name = "userFeedback";
-            this.userFeedback.Size = new System.Drawing.Size(94, 12);
+            this.userFeedback.Size = new System.Drawing.Size(103, 12);
             this.userFeedback.TabIndex = 12;
             this.userFeedback.Text = "[]";
             this.userFeedback.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
