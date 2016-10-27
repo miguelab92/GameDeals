@@ -38,13 +38,14 @@ namespace GameDeal_App
                 taskExistsLabel.BackColor = Color.Lime;
             }
             //If task doesn't exist
-            else 
+            else
             {
                 taskExistsLabel.BackColor = Color.Red;
             }
 
-            //Get all registered tasks from folder
-            IRegisteredTaskCollection registeredTasks = rootFolder.GetTasks(0);
+            //Sets the mask for the input box
+            timeInputBox.Mask = "00:00";
+        }
 
         /// <summary>
         /// Set the existing schedule's time
@@ -66,7 +67,7 @@ namespace GameDeal_App
                 {
                     //We are dealing with AM
                     isAM = true;
-                    
+
                     //Check the length of the string to cover for single digit
                     if (hour.ToString().Length < 2)
                     {
@@ -74,7 +75,8 @@ namespace GameDeal_App
                     }
 
                     timeLine.Append(hour.ToString());
-                } else
+                }
+                else
                 {
                     //Lower hour down to under 12
                     hour -= 12;
@@ -100,25 +102,16 @@ namespace GameDeal_App
                 if (isAM)
                 {
                     timeButtonAM.Checked = true;
-                } else
+                }
+                else
                 {
                     timeButtonPM.Checked = true;
                 }
             }
-            catch {
+            catch
+            {
                 //Ignore errors
             }
-        }
-
-            //If task doesn't exist
-            if (taskExistsLabel.BackColor == Color.Red)
-            {
-                //Create new task
-                newTask = taskService.NewTask(0);
-            }
-
-            //Sets the mask for the input box
-            timeInputBox.Mask = "00:00";
         }
 
         /// <summary>
@@ -126,7 +119,7 @@ namespace GameDeal_App
         /// </summary>
         /// <param name="type">Type of task (9 or 2)</param>
         /// <param name="startTime">Time to use as start time</param>
-        private void CreateSchedule(int type, DateTime startTime)
+        private bool ValidateSchedule()
         {
             //Holds the results of whether task exists
             bool taskExists = false;
