@@ -21,8 +21,10 @@ namespace GameDealsChecker
         //All settings from app.config
         private static string aReceiver;
         private static string aCC;
-        private static string website = "https://www.reddit.com/r/gamedeals";
-        private static string gameFound = " is currently on /r/GameDeals!";
+        private static readonly string website = 
+            "https://www.reddit.com/r/gamedeals";
+        private static readonly string gameFound = 
+            " is currently on /r/GameDeals!";
 
         [STAThread]
         static void Main(string[] args)
@@ -36,13 +38,15 @@ namespace GameDealsChecker
                 //Creates string that will hold the HTML file
                 string pageHTML = GetWebPage();
 
-                //For each game targetted we check against the pageHTML for a mention
+                //For each game targetted we check against the pageHTML 
+                //for a mention
                 foreach (string targetGame in args)
                 {
                     CheckForGame(pageHTML, targetGame, ref log);
                 }
 
-                //If the log had an error, a found game message, or we are debugging
+                //If the log had an error, a found game message, or we are 
+                //debugging
                 if (log.GetLog().Contains(LogFile.GetErrorCode()) || 
                     log.GetLog().Contains(gameFound))
                 {
@@ -68,7 +72,8 @@ namespace GameDealsChecker
                 if (args.Count() == 0)
                 {
                     log.Log("No arguments were passed at time of call", true);
-                    Console.Write("Add at least one game for program to function.\n");
+                    Console.Write(
+                        "Add at least one game for program to function.\n");
                     Console.Write("Press any key to continue...\n");
                     Console.ReadKey();
                 }
@@ -96,7 +101,8 @@ namespace GameDealsChecker
             //Navigate to the URL
             wBrowser.Navigate(website);
 
-            //When the document is completely loaded we copy the HTML into pageHTML for parsing
+            //When the document is completely loaded we copy the HTML 
+            //into pageHTML for parsing
             while (wBrowser.ReadyState != WebBrowserReadyState.Complete)
             {
                 Application.DoEvents();
@@ -115,7 +121,8 @@ namespace GameDealsChecker
         /// <param name="pageHTML">Page to check in</param>
         /// <param name="targetGame">Game to check for</param>
         /// <param name="log">log</param>
-        private static void CheckForGame(string pageHTML, string targetGame, ref LogFile log)
+        private static void CheckForGame(string pageHTML, string targetGame, 
+            ref LogFile log)
         {
             //Holds previous letter to game and next letter after game
             int prevLetterIndx;
@@ -124,16 +131,19 @@ namespace GameDealsChecker
             if (pageHTML.Contains(targetGame.ToLower()))
             {
                 prevLetterIndx = pageHTML.IndexOf(targetGame.ToLower()) - 1;
-                nextLetterIndx = pageHTML.IndexOf(targetGame.ToLower()) + targetGame.Length;
+                nextLetterIndx = pageHTML.IndexOf(targetGame.ToLower()) + 
+                    targetGame.Length;
 
-                //We try to check the previous and next characters in where the game was found
-                //If they are anything other than characters or digits we should be okay. If they
-                //are characters or digits they might be part of an url
+                //We try to check the previous and next characters in where 
+                //the game was found. If they are anything other than 
+                //characters or digits we should be okay. If they are 
+                //characters or digits they might be part of an url
                 try
                 {
                     if (!char.IsLetterOrDigit(pageHTML[prevLetterIndx]) &&
                         (!char.IsLetterOrDigit(pageHTML[nextLetterIndx]) ||
-                         pageHTML[nextLetterIndx] == '-' || pageHTML[nextLetterIndx] == ':'))
+                         pageHTML[nextLetterIndx] == '-' || 
+                         pageHTML[nextLetterIndx] == ':'))
                     {
                         log.Log(targetGame + gameFound);
                     }
@@ -156,12 +166,14 @@ namespace GameDealsChecker
             //Create the SMTP Client and set all the setting from app
             smtpC = new SmtpClient("smtp.gmail.com", 587);
 
-            //Enter your credentials here to send the email (* is a placeholder)
-            smtpC.Credentials = new NetworkCredential("GameDealsChecker@gmail.com", "*" );
+            //Enter credentials here to send the email (* is a placeholder)
+            smtpC.Credentials = 
+                new NetworkCredential("GameDealsChecker@gmail.com", "*" );
             smtpC.EnableSsl = true;
 
             //Create MailMessage and set all the setting from app
-            MailMessage msg = new MailMessage("GameDealsChecker@gmail.com", aReceiver);
+            MailMessage msg = new MailMessage("GameDealsChecker@gmail.com", 
+                aReceiver);
             msg.IsBodyHtml = true;
             msg.Subject = PROGRAM_NAME;
 
@@ -212,7 +224,8 @@ namespace GameDealsChecker
         /// <param name="aValue">Reference where we save data into</param>
         /// <param name="log">Log</param>
         /// <returns>True if successful</returns>
-        private static bool GetConfigSetting(string aSettingKey, ref string aValue, ref LogFile log)
+        private static bool GetConfigSetting(string aSettingKey, 
+            ref string aValue, ref LogFile log)
         {
             bool retVal = true; //Holds results. Assumes success
 
@@ -223,8 +236,8 @@ namespace GameDealsChecker
             if (aValue == null)
             {
                 //Log the key lookup used
-                log.Log("Error retrieving core " + aSettingKey +
-                                    " configuration setting; Application cannot start.", true);
+                log.Log("Error retrieving core " + aSettingKey + 
+                    " configuration setting; Application cannot start.", true);
                 //Could not retrieve info
                 retVal = false;
             }
