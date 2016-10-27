@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Scheduler));
             this.scheduleButton = new System.Windows.Forms.Button();
             this.startupButton = new System.Windows.Forms.RadioButton();
             this.timedButton = new System.Windows.Forms.RadioButton();
@@ -164,6 +165,7 @@
             // timeInputBox
             // 
             this.timeInputBox.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.timeInputBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(249)))), ((int)(((byte)(255)))));
             this.timeInputBox.Enabled = false;
             this.timeInputBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.timeInputBox.Location = new System.Drawing.Point(162, 70);
@@ -219,6 +221,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(243)))), ((int)(((byte)(254)))));
             this.ClientSize = new System.Drawing.Size(292, 156);
             this.Controls.Add(this.userFeedback);
             this.Controls.Add(this.taskExistsLabel);
@@ -231,6 +234,7 @@
             this.Controls.Add(this.timedButton);
             this.Controls.Add(this.startupButton);
             this.Controls.Add(this.scheduleButton);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximumSize = new System.Drawing.Size(308, 1080);
             this.MinimumSize = new System.Drawing.Size(308, 187);
             this.Name = "Scheduler";

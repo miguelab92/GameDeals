@@ -433,7 +433,7 @@ namespace GameDeal_App
         /// <param name="e">Not Used</param>
         private void timeInputBox_Enter(object sender, EventArgs e)
         {
-            timeInputBox.BackColor = Color.White;
+            timeInputBox.BackColor = Color.FromArgb(240, 249, 255);
         }
 
         /// <summary>

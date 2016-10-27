@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ExtraSettings));
             this.emailLabel = new System.Windows.Forms.Label();
             this.copyButton = new System.Windows.Forms.CheckBox();
             this.saveButton = new System.Windows.Forms.Button();
@@ -79,6 +80,7 @@
             // emailInput
             // 
             this.emailInput.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.emailInput.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(249)))), ((int)(((byte)(255)))));
             this.emailInput.Location = new System.Drawing.Point(61, 12);
             this.emailInput.Name = "emailInput";
             this.emailInput.Size = new System.Drawing.Size(197, 20);
@@ -104,6 +106,7 @@
             // copyInputText
             // 
             this.copyInputText.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.copyInputText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(249)))), ((int)(((byte)(255)))));
             this.copyInputText.Enabled = false;
             this.copyInputText.Location = new System.Drawing.Point(61, 52);
             this.copyInputText.Name = "copyInputText";
@@ -156,6 +159,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(243)))), ((int)(((byte)(254)))));
             this.ClientSize = new System.Drawing.Size(267, 122);
             this.Controls.Add(this.ccError);
             this.Controls.Add(this.emailError);
@@ -166,6 +170,7 @@
             this.Controls.Add(this.saveButton);
             this.Controls.Add(this.copyButton);
             this.Controls.Add(this.emailLabel);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximumSize = new System.Drawing.Size(1080, 170);
             this.Name = "ExtraSettings";
             this.Text = "App settings";

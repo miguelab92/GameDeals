@@ -262,7 +262,7 @@ namespace GameDeal_App
                     copyInputText.Text = "";
                     //Reset color and error
                     ccError.Visible = false;
-                    copyInputText.BackColor = Color.White;
+                    copyInputText.BackColor = Color.FromArgb(240, 249, 255);
                 }
             }
         }
@@ -312,7 +312,7 @@ namespace GameDeal_App
         private void emailInput_Enter(object sender, EventArgs e)
         {
             //Reset color and hide error
-            emailInput.BackColor = Color.White;
+            emailInput.BackColor = Color.FromArgb(240, 249, 255);
             emailError.Visible = false;
         }
 
@@ -339,7 +339,7 @@ namespace GameDeal_App
         private void copyInputText_Enter(object sender, EventArgs e)
         {
             //Reset color and hide error
-            copyInputText.BackColor = Color.White;
+            copyInputText.BackColor = Color.FromArgb(240, 249, 255);
             ccError.Visible = false;
         }
 

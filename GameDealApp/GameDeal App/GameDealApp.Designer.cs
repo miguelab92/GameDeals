@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GameDealApp));
             this.listBoxLabel = new System.Windows.Forms.Label();
             this.gamesList = new System.Windows.Forms.ListBox();
             this.addButton = new System.Windows.Forms.Button();
@@ -57,18 +58,19 @@
             this.gamesList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.gamesList.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(249)))), ((int)(((byte)(255)))));
             this.gamesList.FormattingEnabled = true;
             this.gamesList.Location = new System.Drawing.Point(12, 25);
             this.gamesList.Name = "gamesList";
             this.gamesList.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.gamesList.Size = new System.Drawing.Size(228, 147);
+            this.gamesList.Size = new System.Drawing.Size(322, 225);
             this.gamesList.TabIndex = 5;
             this.gamesList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.gamesList_KeyDown);
             // 
             // addButton
             // 
-            this.addButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.addButton.Location = new System.Drawing.Point(137, 175);
+            this.addButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.addButton.Location = new System.Drawing.Point(222, 264);
             this.addButton.Name = "addButton";
             this.addButton.Size = new System.Drawing.Size(47, 23);
             this.addButton.TabIndex = 1;
@@ -79,7 +81,7 @@
             // remove
             // 
             this.remove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.remove.Location = new System.Drawing.Point(193, 175);
+            this.remove.Location = new System.Drawing.Point(287, 264);
             this.remove.Name = "remove";
             this.remove.Size = new System.Drawing.Size(47, 23);
             this.remove.TabIndex = 2;
@@ -89,11 +91,13 @@
             // 
             // inputBox
             // 
-            this.inputBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.inputBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.inputBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(249)))), ((int)(((byte)(255)))));
             this.inputBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.inputBox.Location = new System.Drawing.Point(12, 178);
+            this.inputBox.Location = new System.Drawing.Point(12, 267);
             this.inputBox.Name = "inputBox";
-            this.inputBox.Size = new System.Drawing.Size(119, 20);
+            this.inputBox.Size = new System.Drawing.Size(204, 20);
             this.inputBox.TabIndex = 0;
             this.inputBox.Enter += new System.EventHandler(this.inputBox_Enter);
             this.inputBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.inputBox_KeyDown);
@@ -102,7 +106,7 @@
             // settingsButton
             // 
             this.settingsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.settingsButton.Location = new System.Drawing.Point(25, 212);
+            this.settingsButton.Location = new System.Drawing.Point(25, 301);
             this.settingsButton.Name = "settingsButton";
             this.settingsButton.Size = new System.Drawing.Size(75, 23);
             this.settingsButton.TabIndex = 3;
@@ -114,7 +118,7 @@
             // scheduleButton
             // 
             this.scheduleButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.scheduleButton.Location = new System.Drawing.Point(152, 212);
+            this.scheduleButton.Location = new System.Drawing.Point(246, 301);
             this.scheduleButton.Name = "scheduleButton";
             this.scheduleButton.Size = new System.Drawing.Size(75, 23);
             this.scheduleButton.TabIndex = 4;
@@ -128,7 +132,7 @@
             this.emailLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.emailLabel.BackColor = System.Drawing.Color.Red;
             this.emailLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.emailLabel.Location = new System.Drawing.Point(12, 216);
+            this.emailLabel.Location = new System.Drawing.Point(12, 305);
             this.emailLabel.Name = "emailLabel";
             this.emailLabel.Size = new System.Drawing.Size(7, 16);
             this.emailLabel.TabIndex = 9;
@@ -139,7 +143,7 @@
             this.scheduleLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.scheduleLabel.BackColor = System.Drawing.Color.Red;
             this.scheduleLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.scheduleLabel.Location = new System.Drawing.Point(233, 216);
+            this.scheduleLabel.Location = new System.Drawing.Point(327, 305);
             this.scheduleLabel.Name = "scheduleLabel";
             this.scheduleLabel.Size = new System.Drawing.Size(7, 16);
             this.scheduleLabel.TabIndex = 10;
@@ -150,7 +154,7 @@
             this.moreButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.moreButton.BackColor = System.Drawing.Color.MediumSeaGreen;
             this.moreButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.moreButton.Location = new System.Drawing.Point(122, 213);
+            this.moreButton.Location = new System.Drawing.Point(169, 302);
             this.moreButton.Name = "moreButton";
             this.moreButton.Size = new System.Drawing.Size(13, 23);
             this.moreButton.TabIndex = 11;
@@ -166,7 +170,7 @@
             this.userFeedback.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.userFeedback.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.userFeedback.ForeColor = System.Drawing.Color.Red;
-            this.userFeedback.Location = new System.Drawing.Point(137, 10);
+            this.userFeedback.Location = new System.Drawing.Point(231, 10);
             this.userFeedback.Name = "userFeedback";
             this.userFeedback.Size = new System.Drawing.Size(103, 12);
             this.userFeedback.TabIndex = 12;
@@ -179,7 +183,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(252, 247);
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(243)))), ((int)(((byte)(254)))));
+            this.ClientSize = new System.Drawing.Size(346, 336);
             this.Controls.Add(this.userFeedback);
             this.Controls.Add(this.moreButton);
             this.Controls.Add(this.scheduleLabel);
@@ -191,6 +196,7 @@
             this.Controls.Add(this.addButton);
             this.Controls.Add(this.gamesList);
             this.Controls.Add(this.listBoxLabel);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(264, 278);
             this.Name = "GameDealApp";
             this.Text = "GameDeal App";
