@@ -4,13 +4,12 @@
 /// app much easier to use
 
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
-using TaskScheduler;
+using Microsoft.Win32.TaskScheduler;
 
 namespace GameDeal_App
 {
@@ -99,36 +98,21 @@ namespace GameDeal_App
         /// </summary>
         public void CheckStatus()
         {
-            //Holds if we found task
-            bool taskFound = false;
-
-            //Create a new interface used to check scheduled tasks
-            ITaskService taskService = new TaskScheduler.TaskScheduler();
-            taskService.Connect();
-
-            //Get the root folder of scheduled tasks
-            ITaskFolder rootFolder = taskService.GetFolder("\\");
-
-            //Get all registered tasks from folder
-            IRegisteredTaskCollection registeredTasks = rootFolder.GetTasks(0);
-
-            //For each task inside list of tasks
-            foreach (IRegisteredTask task in registeredTasks)
+            //Create a new interface for the task scheduler
+            using (TaskService taskService = new TaskService())
             {
-                //If a task matches with this program
-                if (task.Name == Scheduler.TASK_NAME)
+                //Look for task
+                Task task = taskService.GetTask(Scheduler.TASK_NAME);
+
+                //If there is no task
+                if (task == null)
                 {
-                    taskFound = true;
+                    scheduleLabel.BackColor = Color.Red;
                 }
-            }
-
-            //Depending on whether we found the task or not we change colors
-            if (taskFound)
-            {
-                scheduleLabel.BackColor = Color.Green;
-            } else
-            {
-                scheduleLabel.BackColor = Color.Red;
+                else
+                {
+                    scheduleLabel.BackColor = Color.Green;
+                }
             }
 
             //Check to see if an config file exists
@@ -152,7 +136,8 @@ namespace GameDeal_App
                 scheduleLabel.Visible = false;
                 //Show credits
                 moreButton.Visible = true;
-            } else
+            }
+            else
             {
                 //Show if incomplete
                 emailLabel.Visible = true;
