@@ -42,10 +42,7 @@
             this.timeGroup = new System.Windows.Forms.GroupBox();
             this.taskExistsLabel = new System.Windows.Forms.Label();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.successLabel = new System.Windows.Forms.Label();
-            this.deleteErrorLabel = new System.Windows.Forms.Label();
-            this.invalidTimeLabel = new System.Windows.Forms.Label();
-            this.taskExistsError = new System.Windows.Forms.Label();
+            this.userFeedback = new System.Windows.Forms.Label();
             this.timeGroup.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -205,67 +202,25 @@
             this.toolTip.SetToolTip(this.taskExistsLabel, "Color shows if schedule currently exists. (Red = No schedule, Green = Schedule Ex" +
         "ists).");
             // 
-            // successLabel
+            // userFeedback
             // 
-            this.successLabel.AutoSize = true;
-            this.successLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.successLabel.ForeColor = System.Drawing.Color.Green;
-            this.successLabel.Location = new System.Drawing.Point(220, 11);
-            this.successLabel.Name = "successLabel";
-            this.successLabel.Size = new System.Drawing.Size(44, 12);
-            this.successLabel.TabIndex = 16;
-            this.successLabel.Text = "Success!";
-            this.successLabel.Visible = false;
-            this.successLabel.Leave += new System.EventHandler(this.successLabel_Leave);
-            // 
-            // deleteErrorLabel
-            // 
-            this.deleteErrorLabel.AutoSize = true;
-            this.deleteErrorLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.deleteErrorLabel.ForeColor = System.Drawing.Color.Red;
-            this.deleteErrorLabel.Location = new System.Drawing.Point(171, 11);
-            this.deleteErrorLabel.Name = "deleteErrorLabel";
-            this.deleteErrorLabel.Size = new System.Drawing.Size(93, 12);
-            this.deleteErrorLabel.TabIndex = 17;
-            this.deleteErrorLabel.Text = "No schedule to delete";
-            this.deleteErrorLabel.Visible = false;
-            this.deleteErrorLabel.Leave += new System.EventHandler(this.deleteErrorLabel_Leave);
-            // 
-            // invalidTimeLabel
-            // 
-            this.invalidTimeLabel.AutoSize = true;
-            this.invalidTimeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.invalidTimeLabel.ForeColor = System.Drawing.Color.Red;
-            this.invalidTimeLabel.Location = new System.Drawing.Point(209, 11);
-            this.invalidTimeLabel.Name = "invalidTimeLabel";
-            this.invalidTimeLabel.Size = new System.Drawing.Size(53, 12);
-            this.invalidTimeLabel.TabIndex = 18;
-            this.invalidTimeLabel.Text = "Invalid time";
-            this.invalidTimeLabel.Visible = false;
-            this.invalidTimeLabel.Leave += new System.EventHandler(this.invalidTimeLabel_Leave);
-            // 
-            // taskExistsError
-            // 
-            this.taskExistsError.AutoSize = true;
-            this.taskExistsError.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.taskExistsError.ForeColor = System.Drawing.Color.Red;
-            this.taskExistsError.Location = new System.Drawing.Point(175, 12);
-            this.taskExistsError.Name = "taskExistsError";
-            this.taskExistsError.Size = new System.Drawing.Size(87, 12);
-            this.taskExistsError.TabIndex = 19;
-            this.taskExistsError.Text = "Task already exists!";
-            this.taskExistsError.Visible = false;
-            this.taskExistsError.Leave += new System.EventHandler(this.taskExistsError_Leave);
+            this.userFeedback.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.userFeedback.ForeColor = System.Drawing.Color.Green;
+            this.userFeedback.Location = new System.Drawing.Point(149, 11);
+            this.userFeedback.Name = "userFeedback";
+            this.userFeedback.Size = new System.Drawing.Size(117, 14);
+            this.userFeedback.TabIndex = 16;
+            this.userFeedback.Text = "[]";
+            this.userFeedback.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.userFeedback.Visible = false;
+            this.userFeedback.Leave += new System.EventHandler(this.userFeedback_Leave);
             // 
             // Scheduler
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(292, 156);
-            this.Controls.Add(this.taskExistsError);
-            this.Controls.Add(this.invalidTimeLabel);
-            this.Controls.Add(this.deleteErrorLabel);
-            this.Controls.Add(this.successLabel);
+            this.Controls.Add(this.userFeedback);
             this.Controls.Add(this.taskExistsLabel);
             this.Controls.Add(this.timeGroup);
             this.Controls.Add(this.timeInputBox);
@@ -303,9 +258,6 @@
         private System.Windows.Forms.GroupBox timeGroup;
         private System.Windows.Forms.Label taskExistsLabel;
         private System.Windows.Forms.ToolTip toolTip;
-        private System.Windows.Forms.Label successLabel;
-        private System.Windows.Forms.Label deleteErrorLabel;
-        private System.Windows.Forms.Label invalidTimeLabel;
-        private System.Windows.Forms.Label taskExistsError;
+        private System.Windows.Forms.Label userFeedback;
     }
 }

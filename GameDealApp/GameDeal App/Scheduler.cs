@@ -167,8 +167,13 @@ namespace GameDeal_App
         private void scheduleButton_Click(object sender, EventArgs e)
         {
             //If a task doesn't already exist
-            if (taskExistsLabel.BackColor != Color.Lime) {
+            if (taskExistsLabel.BackColor != Color.Lime)
+            {
                 CreateSchedule();
+            }
+            else
+            {
+                SetUserFeedback("Schedule already exists!");
             }
         }
 
@@ -226,8 +231,7 @@ namespace GameDeal_App
             if (!isValid)
             {
                 //Show invalid time label
-                invalidTimeLabel.Visible = true;
-                invalidTimeLabel.Focus();
+                SetUserFeedback("Time is not valid");
                 timeInputBox.BackColor = Color.Red;
             }
 
@@ -246,6 +250,9 @@ namespace GameDeal_App
             if (taskExistsLabel.BackColor == Color.Lime)
             {
                 DeleteSchedule();
+            } else
+            {
+                SetUserFeedback("Schedule doesn't exist!");
             }
         }
 
@@ -331,7 +338,7 @@ namespace GameDeal_App
             }
             else
             {
-                MessageBox.Show("Error creating schedule");
+                SetUserFeedback("Error in creating schedule...");
             }
         }
 
@@ -348,12 +355,11 @@ namespace GameDeal_App
 
                 if (ValidateSchedule())
                 {
-                    MessageBox.Show("Error deleting");
+                    SetUserFeedback("Error in deleting schedule...");
                 } else
                 {
                     (Owner as GameDealApp).CheckStatus();
-                    successLabel.Visible = true;
-                    successLabel.Focus();
+                    SetUserFeedback("Success!", false);
                 }
             }
         }
@@ -415,29 +421,9 @@ namespace GameDeal_App
         /// </summary>
         /// <param name="sender">Not Used</param>
         /// <param name="e">Not Used</param>
-        private void successLabel_Leave(object sender, EventArgs e)
+        private void userFeedback_Leave(object sender, EventArgs e)
         {
-            successLabel.Visible = false;
-        }
-
-        /// <summary>
-        /// If user focuses on anything but the label
-        /// </summary>
-        /// <param name="sender">Not Used</param>
-        /// <param name="e">Not Used</param>
-        private void deleteErrorLabel_Leave(object sender, EventArgs e)
-        {
-            deleteErrorLabel.Visible = false;
-        }
-
-        /// <summary>
-        /// If user focuses on anything but the label
-        /// </summary>
-        /// <param name="sender">Not Used</param>
-        /// <param name="e">Not Used</param>
-        private void invalidTimeLabel_Leave(object sender, EventArgs e)
-        {
-            invalidTimeLabel.Visible = false;
+            userFeedback.Visible = false;
         }
 
         /// <summary>
@@ -461,15 +447,23 @@ namespace GameDeal_App
             ValidTime();
         }
 
-
-        /// <summary> 
-        /// Shows when trying to create a task while it exists 
-        /// </summary> 
-        /// <param name="sender">Not used</param> 
-        /// <param name="e">Not used</param> 
-        private void taskExistsError_Leave(object sender, EventArgs e)
+        private void SetUserFeedback(string message, bool isError = true)
         {
-            taskExistsError.Visible = false;
+            //Set the user feedback to message and visible
+            userFeedback.Visible = true;
+            userFeedback.Text = message;
+
+            //If its an error
+            if (isError)
+            {
+                //Take focus away and make message red
+                userFeedback.ForeColor = Color.Red;
+            }
+            else
+            {
+                //Otherwise just show message
+                userFeedback.ForeColor = Color.Green;
+            }
         }
     }
 }
