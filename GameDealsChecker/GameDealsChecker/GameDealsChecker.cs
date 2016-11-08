@@ -10,10 +10,12 @@ using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Windows.Forms;
+using System.Collections.Generic;
+using RedditSharp;
 
 namespace GameDealsChecker
 {
-    class Program
+    class GameDealsChecker
     {
         //Program name for email
         private readonly static string PROGRAM_NAME = "GameDealsChecker";
@@ -21,8 +23,6 @@ namespace GameDealsChecker
         //All settings from app.config
         private static string aReceiver;
         private static string aCC;
-        private static readonly string website = 
-            "https://www.reddit.com/r/gamedeals";
         private static readonly string gameFound = 
             " is currently on /r/GameDeals!";
 
@@ -35,14 +35,14 @@ namespace GameDealsChecker
             //If we have arguments
             if (GetConfigSettings(ref log) && args.Length > 0)
             {
-                //Creates string that will hold the HTML file
-                string pageHTML = GetWebPage();
+                WebAgent webAgent = new WebAgent();
+                Reddit reddit = new Reddit(webAgent, false);
+                RedditSharp.Things.Subreddit subReddit = 
+                    reddit.GetSubreddit("/r/GameDeals");
 
-                //For each game targetted we check against the pageHTML 
-                //for a mention
-                foreach (string targetGame in args)
+                foreach (RedditSharp.Things.Post post in subReddit.Hot.Take(25))
                 {
-                    CheckForGame(pageHTML, targetGame, ref log);
+                    CheckForGames(args, post, ref log);
                 }
 
                 //If the log had an error, a found game message, or we are 
@@ -84,72 +84,22 @@ namespace GameDealsChecker
         }
 
         /// <summary>
-        /// Gets the webpage HTML
+        /// Check for the games
         /// </summary>
-        /// <returns>Webpage HTML</returns>
-        private static string GetWebPage()
+        /// <param name="args">All games</param>
+        /// <param name="post">Post we are checking</param>
+        /// <param name="log">Logs results</param>
+        private static void CheckForGames(string[] args,
+            RedditSharp.Things.Post post, ref LogFile log)
         {
-            //Creates string that will hold the HTML file
-            string pageHTML = "";
-
-            //Create a web browser
-            WebBrowser wBrowser = new WebBrowser();
-
-            //Surpress script error
-            wBrowser.ScriptErrorsSuppressed = true;
-
-            //Navigate to the URL
-            wBrowser.Navigate(website);
-
-            //When the document is completely loaded we copy the HTML 
-            //into pageHTML for parsing
-            while (wBrowser.ReadyState != WebBrowserReadyState.Complete)
+            if ( !post.NSFW )
             {
-                Application.DoEvents();
-            }
-
-            //Save the entire webpage into pageHTML
-            pageHTML = wBrowser.DocumentText;
-            pageHTML = pageHTML.ToLower();
-
-            return pageHTML;
-        }
-
-        /// <summary>
-        /// Check for the game in the html file
-        /// </summary>
-        /// <param name="pageHTML">Page to check in</param>
-        /// <param name="targetGame">Game to check for</param>
-        /// <param name="log">log</param>
-        private static void CheckForGame(string pageHTML, string targetGame, 
-            ref LogFile log)
-        {
-            //Holds previous letter to game and next letter after game
-            int prevLetterIndx;
-            int nextLetterIndx;
-
-            if (pageHTML.Contains(targetGame.ToLower()))
-            {
-                prevLetterIndx = pageHTML.IndexOf(targetGame.ToLower()) - 1;
-                nextLetterIndx = pageHTML.IndexOf(targetGame.ToLower()) + 
-                    targetGame.Length;
-
-                //We try to check the previous and next characters in where 
-                //the game was found. If they are anything other than 
-                //characters or digits we should be okay. If they are 
-                //characters or digits they might be part of an url
-                try
+                foreach ( string arg in args )
                 {
-                    if (!char.IsLetterOrDigit(pageHTML[prevLetterIndx]) &&
-                        (!char.IsLetterOrDigit(pageHTML[nextLetterIndx]) ||
-                         pageHTML[nextLetterIndx] == '-' || 
-                         pageHTML[nextLetterIndx] == ':'))
+                    if (post.Title.Contains(arg))
                     {
-                        log.Log(targetGame + gameFound);
+                        log.Log(arg + gameFound);
                     }
-                }
-                catch {
-                    //Catch any out of bounds
                 }
             }
         }
