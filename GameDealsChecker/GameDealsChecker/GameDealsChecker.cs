@@ -10,6 +10,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Windows.Forms;
+using System.Text;
 using System.Collections.Generic;
 using RedditSharp;
 
@@ -92,13 +93,22 @@ namespace GameDealsChecker
         private static void CheckForGames(string[] args,
             RedditSharp.Things.Post post, ref LogFile log)
         {
+            StringBuilder tempLog = new StringBuilder();
+
             if ( !post.NSFW )
             {
                 foreach ( string arg in args )
                 {
                     if (post.Title.Contains(arg))
                     {
-                        log.Log(arg + gameFound);
+                        tempLog.Clear();
+
+                        tempLog.Append("<a href = \"");
+                        tempLog.Append(post.Permalink);
+                        tempLog.Append("\" >");
+                        tempLog.Append(arg);
+                        tempLog.Append(gameFound);
+                        tempLog.Append("</a></br>");
                     }
                 }
             }
